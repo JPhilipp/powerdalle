@@ -109,10 +109,10 @@ function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id
   return `
         <img src="${imageUrl}" alt="" ${loadingAttribute}>
         <p>${prompt}
-          <br><button onclick="copyToClipboard('${prompt}', this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
+          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
         </p>
         <p>${revisedPrompt}
-          <br><button onclick="copyToClipboard('${revisedPrompt}', this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
+          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
         </p>
 
         <p><span class="creationSettings">${style} style, ${quality} quality</span>
@@ -121,7 +121,8 @@ function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id
   `;
 }
 
-function copyToClipboard(textToCopy, btnElement) {
+function copyToClipboard(btnElement) {
+  const textToCopy = btnElement.parentNode.childNodes[0].nodeValue.trim();
   navigator.clipboard.writeText(textToCopy).then(() => {
       btnElement.classList.add('copy-success');
       setTimeout(() => btnElement.classList.remove('copy-success'), 1000);
