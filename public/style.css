@@ -94,7 +94,7 @@ label[for="useExactPrompt"] {
   content: '';
   box-sizing: border-box;
   position: absolute;
-  top: 50%;
+  top: 50px;
   left: 50%;
   width: 20px;
   height: 20px;
@@ -104,4 +104,6 @@ label[for="useExactPrompt"] {
   border: 2px solid #ccc;
   border-top-color: #333;
   animation: spinner .6s linear infinite;
+  background-color: white;
+  padding: 20px;
 }
