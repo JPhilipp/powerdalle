@@ -79,7 +79,7 @@ app.post('/generate-image', async (req, res) => {
 
       })
       .then(() => {
-        res.json({ imageUrl: `http://localhost:${PORT}/images/${filename}`, revisedPrompt: revisedPrompt });
+        res.json({ imageUrl: `/images/${filename}`, revisedPrompt: revisedPrompt });
       })
       .catch(error => {
         console.error('Error downloading or saving image:', error);
@@ -91,6 +91,30 @@ app.post('/generate-image', async (req, res) => {
     res.status(500).send('Error generating image');
   }
 });
+
+
+app.get('/images-data', async (req, res) => {
+  const imagesDir = path.join(__dirname, 'images');
+  fs.readdir(imagesDir, (err, files) => {
+    if (err) {
+      return res.status(500).json({ message: 'Unable to read images directory' });
+    }
+
+    const imageFiles = files.filter(file => file.endsWith('.png')).sort().reverse();
+
+    const imagesData = imageFiles.map(filename => {
+      const promptFile = filename.replace('.png', '.prompt');
+      const promptPath = path.join(imagesDir, promptFile);
+      const prompt = fs.readFileSync(promptPath, 'utf8');
+      const imageUrl = `/images/${filename}`;
+
+      return { imageUrl, prompt };
+    });
+
+    res.json(imagesData);
+  });
+});
+
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

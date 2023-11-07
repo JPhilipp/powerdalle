@@ -1,3 +1,34 @@
+document.addEventListener('DOMContentLoaded', (event) => {
+  fetch('http://localhost:3000/images-data')
+    .then(response => response.json())
+    .then(data => {
+      const imagesDiv = document.getElementById('images');
+      imagesDiv.innerHTML = ''; // Clear current contents
+
+      data.forEach(item => {
+        const parts = item.prompt.split('\n---\n');
+        const prompt = parts[0]; // The first part of the split
+        const revisedPrompt = parts[1] || ''; // The second part of the split or an empty string if it doesn't exist
+
+        const imageWrapper = document.createElement('div');
+        imageWrapper.classList.add('image-wrapper');
+        imageWrapper.innerHTML = `
+          <img src="${item.imageUrl}" alt="">
+          <p>
+            ${prompt}<br>
+            <em>${revisedPrompt}</em>
+          </p>
+        `;
+        imagesDiv.appendChild(imageWrapper);
+      });
+    })
+    .catch(error => {
+      console.error('Error fetching images:', error);
+    });
+});
+
+
+
 document.getElementById('generate').addEventListener('click', function() {
   var prompt = document.getElementById('prompt').value;
   var style = document.getElementById('style').value;
