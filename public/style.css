@@ -46,6 +46,10 @@ h1 {
   justify-content: space-around;
 }
 
+.images img {
+  max-height: 800px;
+}
+
 .image-wrapper {
   margin-top: 20px;
   text-align: center;

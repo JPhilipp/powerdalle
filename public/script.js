@@ -1,23 +1,21 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-  fetch('http://localhost:3000/images-data')
+  fetch('/images-data')
     .then(response => response.json())
     .then(data => {
       const imagesDiv = document.getElementById('images');
-      imagesDiv.innerHTML = ''; // Clear current contents
+      imagesDiv.innerHTML = '';
 
       data.forEach(item => {
         const parts = item.prompt.split('\n---\n');
-        const prompt = parts[0]; // The first part of the split
-        const revisedPrompt = parts[1] || ''; // The second part of the split or an empty string if it doesn't exist
+        const prompt = parts[0];
+        const revisedPrompt = parts[1] || '';
 
         const imageWrapper = document.createElement('div');
         imageWrapper.classList.add('image-wrapper');
         imageWrapper.innerHTML = `
           <img src="${item.imageUrl}" alt="">
-          <p>
-            ${prompt}<br>
-            <em>${revisedPrompt}</em>
-          </p>
+          <p>${prompt}</p>
+          <p><em>${revisedPrompt}</em></p>
         `;
         imagesDiv.appendChild(imageWrapper);
       });
@@ -52,7 +50,7 @@ document.getElementById('generate').addEventListener('click', function() {
   var numImages = parseInt(document.getElementById('numImages').value, 10);
 
   Array.from({ length: numImages }, (_, i) => i + 1).forEach(function() {
-    fetch('http://localhost:3000/generate-image', {
+    fetch('/generate-image', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -69,10 +67,8 @@ document.getElementById('generate').addEventListener('click', function() {
       imageWrapper.innerHTML = `
         <img src="${data.imageUrl}" alt="">
         <p>${prompt}<br>
-           (${style} style, ${quality} quality)
-           <br>
-           <em>${data.revisedPrompt}</em><br>
-        </p>
+          (${style} style, ${quality} quality)</p>
+        <p><em>${data.revisedPrompt}</em></p>
       `;
       document.getElementById('images').prepend(imageWrapper);
 
