@@ -59,13 +59,18 @@ document.getElementById('generate').addEventListener('click', function() {
 
       var imageWrapper = document.createElement('div');
       imageWrapper.classList.add('image-wrapper');
-      imageWrapper.setAttribute('data-id', data.id); 
-      imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, false);
+      if (data.error) {
+        imageWrapper.innerHTML = `<p class="error-wrapper">Oops, OpenAI says "${data.error.message}"</p><p>Your prompt was "${prompt}".</p>`;
+      }
+      else {
+        imageWrapper.setAttribute('data-id', data.id); 
+        imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, false);
+      }
       document.getElementById('images').prepend(imageWrapper);
 
     })
     .catch(error => {
-      console.error('Error:', error);
+      console.log(error);
       button.disabled = false;
       button.classList.remove('spinner');
     });

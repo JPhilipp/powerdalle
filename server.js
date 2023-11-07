@@ -45,6 +45,19 @@ app.post('/generate-image', async (req, res) => {
     return res.status(400).send('Invalid style value provided.');
   }
 
+  const doTestError = false;
+  if (doTestError) {
+    var data = {
+      error: {
+        code: 'test_content_policy_violation',
+        message: 'Your request was rejected as a result of our safety system. Your prompt may contain text that is not allowed by our safety system.',
+        param: null,
+        type: 'invalid_request_error'
+      }
+    }
+    return res.status(500).send(data);
+  }
+
   try {
     const response = await fetch('https://api.openai.com/v1/images/generations', {
       method: 'POST',
@@ -66,6 +79,10 @@ app.post('/generate-image', async (req, res) => {
 
     console.log("Dall-E returned:");
     console.log(data);
+
+    if (data.error) {
+      return res.status(500).send(data);
+    }
 
     const imageUrl = data.data[0].url;
     const revisedPrompt = data.data[0].revised_prompt;

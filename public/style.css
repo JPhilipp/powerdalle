@@ -119,6 +119,11 @@ label[for="useExactPrompt"] {
   font-style: italic;
 }
 
+.error-wrapper {
+  color: red;
+  font-weight: bold;
+}
+
 @keyframes background-fade {
   from { background-color: green; }
   to { background-color: initial; }
