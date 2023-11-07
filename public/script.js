@@ -5,11 +5,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
       const imagesDiv = document.getElementById('images');
       imagesDiv.innerHTML = '';
 
-      data.forEach(item => {
+      data.forEach((item, index) => {
         const imageWrapper = document.createElement('div');
         imageWrapper.classList.add('image-wrapper');
         imageWrapper.setAttribute('data-id', item.id); 
-        imageWrapper.innerHTML = imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id);
+
+        var doLazyLoad = index > 10;
+        imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id, doLazyLoad);
+
         imagesDiv.appendChild(imageWrapper);
       });
     })
@@ -57,7 +60,7 @@ document.getElementById('generate').addEventListener('click', function() {
       var imageWrapper = document.createElement('div');
       imageWrapper.classList.add('image-wrapper');
       imageWrapper.setAttribute('data-id', data.id); 
-      imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id);
+      imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, false);
       document.getElementById('images').prepend(imageWrapper);
 
     })
@@ -96,9 +99,10 @@ document.addEventListener('click', function(event) {
 });
 
 
-function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id) {
+function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
+  const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
   return `
-        <img src="${imageUrl}" alt="">
+        <img src="${imageUrl}" alt="" ${loadingAttribute}>
         <p>${prompt}
           <br><button onclick="copyToClipboard('${prompt}', this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
         </p>
