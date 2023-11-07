@@ -12,4 +12,4 @@ The Power Dall-E local web UI is a simple way to use Dall-E 3 with its advanced 
 4. Navigate to the project via the command line, and type *node server.js*
 5. Open http://localhost:3000 in your browser. Have fun!
 
-_This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI dashboard](https://platform.openai.com/usage))._
+_This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI costs dashboard](https://platform.openai.com/usage) and the [pricing table](https://openai.com/pricing))._
