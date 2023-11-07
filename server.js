@@ -17,10 +17,9 @@ const allowedStyles = ['vivid', 'natural'];
 
 app.post('/generate-image', async (req, res) => {
 
-  console.log("Now working on received prompt:");
-  console.log(req.body.prompt);
-
-  const { prompt, style, resolution } = req.body;
+  const { prompt, style, resolution, quality } = req.body;
+  
+  console.log(`Now working on received prompt "${prompt}" with style "${style}", resolution "${resolution}", and quality "${quality}"`);
 
   if (!allowedStyles.includes(style)) {
     return res.status(400).send('Invalid style value provided.');
@@ -37,7 +36,9 @@ app.post('/generate-image', async (req, res) => {
         prompt: prompt,
         n: 1,
         size: resolution,
-        style: style
+        style: style,
+        quality: quality,
+        model: "dall-e-3"
       }),
     });
 
@@ -47,6 +48,7 @@ app.post('/generate-image', async (req, res) => {
     console.log(data);
 
     const imageUrl = data.data[0].url;
+    const revisedPrompt = data.data[0].revised_prompt;
     let filename;
     
     axios({
@@ -59,7 +61,7 @@ app.post('/generate-image', async (req, res) => {
         const guid = crypto.randomBytes(4).toString('hex');
         const dateTime = getFormattedDateTime();
         
-        const filenameBase = `${dateTime}-${style}-${guid}`;
+        const filenameBase = `${dateTime}-${style}-${quality}-${resolution}-${guid}`;
         filename = `${filenameBase}.png`;
         const filepath = path.join(__dirname, 'images', filename);
         const promptPath = path.join(__dirname, 'images', `${filenameBase}.prompt`);
@@ -77,7 +79,7 @@ app.post('/generate-image', async (req, res) => {
 
       })
       .then(() => {
-        res.json({ imageUrl: `http://localhost:${PORT}/images/${filename}` });
+        res.json({ imageUrl: `http://localhost:${PORT}/images/${filename}`, revisedPrompt: revisedPrompt });
       })
       .catch(error => {
         console.error('Error downloading or saving image:', error);

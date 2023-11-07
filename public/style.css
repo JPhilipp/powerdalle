@@ -2,6 +2,11 @@ body {
   font-family: Arial, sans-serif;
 }
 
+#prompt {
+  font-family: arial, sans-serif;
+  font-size: 1.25em;
+}
+
 .wrapper {
   max-width: 600px;
   margin: auto;
@@ -32,6 +37,27 @@ body {
   margin-top: 20px;
   text-align: center;
 }
+
+.form-group-wrapper {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  flex: 1; /* This will allow each .form-group to grow */
+  min-width: 120px; /* This prevents the .form-group from being too small */
+  margin: 0 10px; /* This adds spacing between the .form-group elements */
+}
+
+#generate {
+  display: block;
+  margin: auto;
+  font-size: 1.25em;
+  min-width: 120px;
+}
+
 
 @keyframes spinner {
   to { transform: rotate(360deg); }
