@@ -3,6 +3,7 @@ document.getElementById('generate').addEventListener('click', function() {
   var style = document.getElementById('style').value;
   var resolution = document.getElementById('resolution').value;
   var quality = document.getElementById('quality').value;
+  var useExactPrompt = document.getElementById('useExactPrompt').checked;
 
   var button = document.getElementById('generate');
   button.disabled = true;
@@ -11,6 +12,10 @@ document.getElementById('generate').addEventListener('click', function() {
   if (!prompt) {
     alert('Please enter a prompt.');
     return;
+  }
+
+  if (useExactPrompt) {
+    prompt = "Please use this exact prompt, do not change it: " + prompt;
   }
   
   var numImages = parseInt(document.getElementById('numImages').value, 10);

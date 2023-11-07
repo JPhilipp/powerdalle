@@ -8,7 +8,7 @@ body {
 }
 
 .wrapper {
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
   padding: 20px;
 }
@@ -46,9 +46,9 @@ body {
 }
 
 .form-group {
-  flex: 1; /* This will allow each .form-group to grow */
-  min-width: 120px; /* This prevents the .form-group from being too small */
-  margin: 0 10px; /* This adds spacing between the .form-group elements */
+  flex: 1;
+  min-width: 80px; /* This prevents the .form-group from being too small */
+  margin: 0 10px;
 }
 
 #generate {
@@ -58,6 +58,14 @@ body {
   min-width: 120px;
 }
 
+#useExactPrompt {
+  display: inline-block;
+  margin-right: 5px; /* Adjust the space between the checkbox and the label */
+}
+
+label[for="useExactPrompt"] {
+  display: inline;
+}
 
 @keyframes spinner {
   to { transform: rotate(360deg); }
