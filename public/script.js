@@ -104,10 +104,16 @@ document.addEventListener('click', function(event) {
 });
 
 
+document.getElementById('images').addEventListener('click', function(event) {
+  if (event.target.classList.contains('generatedImage')) {
+    event.target.classList.toggle('fullSizeImage');
+  }
+});
+
 function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
   const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
   return `
-        <img src="${imageUrl}" alt="" ${loadingAttribute}>
+        <img src="${imageUrl}" alt="" ${loadingAttribute} class="generatedImage">
         <p>${prompt}
           <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
         </p>

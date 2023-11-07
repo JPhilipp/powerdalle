@@ -46,8 +46,12 @@ h1 {
   justify-content: space-around;
 }
 
-.images img {
+.images img.generatedImage {
   max-height: 800px;
+}
+
+.images img.fullSizeImage {
+  max-height: none !important;
 }
 
 .image-wrapper {
