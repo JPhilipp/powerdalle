@@ -1,5 +1,17 @@
 body {
   font-family: Arial, sans-serif;
+  background-color: #eee;
+}
+
+h1 {
+  position: absolute;
+  top: 0px;
+  left: 0;
+  width: 100px;
+  font-size: 1.5em;
+  margin: 0;
+  padding: 10px;
+  color: #aaa;
 }
 
 #prompt {
@@ -37,6 +49,8 @@ body {
 .image-wrapper {
   margin-top: 20px;
   text-align: center;
+  border-bottom: 2px solid #aaa;
+  margin-bottom: 50px;
 }
 
 .form-group-wrapper {

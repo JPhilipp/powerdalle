@@ -71,7 +71,7 @@ app.post('/generate-image', async (req, res) => {
         
         return new Promise((resolve, reject) => {
           writer.on('finish', () => {
-            fs.writeFileSync(promptPath, prompt);
+            fs.writeFileSync(promptPath, prompt + '\n---\n' + revisedPrompt);
             resolve();
           });
           writer.on('error', reject);
