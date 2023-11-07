@@ -5,6 +5,7 @@ body {
 #prompt {
   font-family: arial, sans-serif;
   font-size: 1.25em;
+  padding: 5px;
 }
 
 .wrapper {
