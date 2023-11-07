@@ -60,7 +60,7 @@ document.getElementById('generate').addEventListener('click', function() {
       var imageWrapper = document.createElement('div');
       imageWrapper.classList.add('image-wrapper');
       if (data.error) {
-        imageWrapper.innerHTML = `<p class="error-wrapper">Oops, OpenAI says "${data.error.message}"</p><p>Your prompt was "<strong>${prompt}</strong>", though the issue may also have been in the unknowable OpenAI-auto-revised prompt.</p>`;
+        imageWrapper.innerHTML = `<p class="error-wrapper">Oops, OpenAI says "${data.error.message}" (Code: ${data.error.code}).</p><p>Your prompt was "<strong>${prompt}</strong>", though the issue may also have been in the unknowable OpenAI-auto-revised prompt.</p>`;
       }
       else {
         imageWrapper.setAttribute('data-id', data.id); 
