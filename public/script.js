@@ -8,13 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       data.forEach(item => {
         const imageWrapper = document.createElement('div');
         imageWrapper.classList.add('image-wrapper');
-        imageWrapper.innerHTML = `
-          <img src="${item.imageUrl}" alt="">
-          <p>${item.prompt}<br>
-          (${item.style} style, ${item.quality} quality)
-          </p>
-          <p><em>${item.revisedPrompt}</em></p>
-        `;
+        imageWrapper.innerHTML = imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality);
         imagesDiv.appendChild(imageWrapper);
       });
     })
@@ -35,7 +29,7 @@ document.getElementById('generate').addEventListener('click', function() {
     alert('Please enter a prompt.');
     return;
   }
-  
+
   if (useExactPrompt) {
     prompt = "Please use this exact prompt, do not change it: " + prompt;
   }
@@ -61,12 +55,7 @@ document.getElementById('generate').addEventListener('click', function() {
 
       var imageWrapper = document.createElement('div');
       imageWrapper.classList.add('image-wrapper');
-      imageWrapper.innerHTML = `
-        <img src="${data.imageUrl}" alt="">
-        <p>${prompt}<br>
-          (${style} style, ${quality} quality)</p>
-        <p><em>${data.revisedPrompt}</em></p>
-      `;
+      imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data);
       document.getElementById('images').prepend(imageWrapper);
 
     })
@@ -77,3 +66,12 @@ document.getElementById('generate').addEventListener('click', function() {
     });
   });
 });
+
+function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality) {
+    return `
+        <img src="${imageUrl}" alt="">
+        <p>${prompt}<br>
+          (${style} style, ${quality} quality)</p>
+        <p><em>${revisedPrompt}</em></p>
+      `;
+}

@@ -143,6 +143,23 @@ app.get('/images-data', async (req, res) => {
 });
 
 
+app.delete('/delete-image/:id', (req, res) => {
+  const { id } = req.params;
+
+  db.serialize(() => {
+    const deleteStmt = db.prepare("DELETE FROM images WHERE id = ?");
+    deleteStmt.run(id, function (err) {
+      deleteStmt.finalize();
+      if (err) {
+        res.status(500).json({ message: 'Error deleting image data from database' });
+      } else {
+        res.json({ message: 'Image data deleted successfully', id: this.lastID });
+      }
+    });
+  });
+});
+
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(PORT, () => {
