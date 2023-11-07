@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         imageWrapper.classList.add('image-wrapper');
         imageWrapper.innerHTML = `
           <img src="${item.imageUrl}" alt="">
-          <p>${item.prompt}</p>
+          <p>${item.prompt}<br>
+          (${item.style} style, ${item.quality} quality)
+          </p>
           <p><em>${item.revisedPrompt}</em></p>
         `;
         imagesDiv.appendChild(imageWrapper);
