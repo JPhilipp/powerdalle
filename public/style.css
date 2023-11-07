@@ -55,6 +55,7 @@ h1 {
   text-align: center;
   border-bottom: 2px solid #aaa;
   margin-bottom: 50px;
+  padding-bottom: 20px;
 }
 
 .form-group-wrapper {

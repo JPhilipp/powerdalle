@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
       data.forEach(item => {
         const imageWrapper = document.createElement('div');
         imageWrapper.classList.add('image-wrapper');
-        imageWrapper.innerHTML = imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality);
+        imageWrapper.setAttribute('data-id', item.id); 
+        imageWrapper.innerHTML = imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id);
         imagesDiv.appendChild(imageWrapper);
       });
     })
@@ -55,7 +56,8 @@ document.getElementById('generate').addEventListener('click', function() {
 
       var imageWrapper = document.createElement('div');
       imageWrapper.classList.add('image-wrapper');
-      imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data);
+      imageWrapper.setAttribute('data-id', data.id); 
+      imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id);
       document.getElementById('images').prepend(imageWrapper);
 
     })
@@ -67,11 +69,39 @@ document.getElementById('generate').addEventListener('click', function() {
   });
 });
 
-function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality) {
+
+document.addEventListener('click', function(event) {
+  if (event.target.classList.contains('delete-btn')) {
+    const confirmed = confirm('Are you sure you want to delete this image?');
+    if (confirmed) {
+      const imageWrapper = event.target.closest('.image-wrapper');
+      const imageId = imageWrapper.getAttribute('data-id');
+  
+      fetch(`/delete-image/${imageId}`, {
+        method: 'DELETE'
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.message === 'Image data deleted successfully') {
+          imageWrapper.remove();
+        } else {
+          alert('Error deleting image');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
+  }
+});
+
+
+function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id) {
     return `
         <img src="${imageUrl}" alt="">
         <p>${prompt}<br>
           (${style} style, ${quality} quality)</p>
-        <p><em>${revisedPrompt}</em></p>
+        <p>Revised prompt: <em>${revisedPrompt}</em></p>
+        <button class="delete-btn">Delete image</button>
       `;
 }

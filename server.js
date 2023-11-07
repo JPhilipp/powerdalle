@@ -95,16 +95,23 @@ app.post('/generate-image', async (req, res) => {
             db.run(`
               INSERT INTO images (imageUrl, prompt, revisedPrompt, style, size, quality, model) 
               VALUES (?, ?, ?, ?, ?, ?, ?)`, 
-              [localImageUrl, prompt, revisedPrompt, style, size, quality, model]);
-
-            resolve();
-          });
+              [localImageUrl, prompt, revisedPrompt, style, size, quality, model],
+              function(err) {
+                if (err) {
+                  reject(err);
+                } else {
+                  resolve(this.lastID);
+                }
+              }
+            );
+            
+        });
           writer.on('error', reject);
         });
 
       })
-      .then(() => {
-        res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt });
+      .then(lastID => {
+        res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt, id: lastID });
       })
       .catch(error => {
         console.error('Error downloading or saving image:', error);
@@ -120,7 +127,7 @@ app.post('/generate-image', async (req, res) => {
 
 app.get('/images-data', async (req, res) => {
   const query = `
-    SELECT imageUrl, prompt, revisedPrompt, style, size, quality 
+    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality 
     FROM images 
     ORDER BY createdAt DESC
   `;
@@ -131,6 +138,7 @@ app.get('/images-data', async (req, res) => {
       res.status(500).json({ message: 'Error querying the database' });
     } else {
       res.json(rows.map(row => ({
+        id: row.id,
         imageUrl: row.imageUrl,
         prompt: row.prompt,
         revisedPrompt: row.revisedPrompt,
@@ -146,15 +154,29 @@ app.get('/images-data', async (req, res) => {
 app.delete('/delete-image/:id', (req, res) => {
   const { id } = req.params;
 
-  db.serialize(() => {
-    const deleteStmt = db.prepare("DELETE FROM images WHERE id = ?");
-    deleteStmt.run(id, function (err) {
-      deleteStmt.finalize();
+  db.get("SELECT imageUrl FROM images WHERE id = ?", [id], (err, row) => {
+    if (err) {
+      return res.status(500).json({ message: 'Error finding image to delete' });
+    }
+    if (!row) {
+      return res.status(404).json({ message: 'Image not found' });
+    }
+
+    const filePath = path.join(__dirname, row.imageUrl);
+    fs.unlink(filePath, (err) => {
       if (err) {
-        res.status(500).json({ message: 'Error deleting image data from database' });
-      } else {
-        res.json({ message: 'Image data deleted successfully', id: this.lastID });
+        return res.status(500).json({ message: 'Error deleting image file' });
       }
+
+      const deleteStmt = db.prepare("DELETE FROM images WHERE id = ?");
+      deleteStmt.run(id, function (err) {
+        deleteStmt.finalize();
+        if (err) {
+          res.status(500).json({ message: 'Error deleting image data from database' });
+        } else {
+          res.json({ message: 'Image data deleted successfully', id: id });
+        }
+      });
     });
   });
 });
