@@ -35,7 +35,10 @@ document.getElementById('generate').addEventListener('click', function() {
   }
 
   if (useExactPrompt) {
-    prompt = "Please use this exact prompt, do not change it: " + prompt;
+    const promptPrefix = 'Please use this exact prompt, do not change it: ';
+    if (!prompt.startsWith(promptPrefix)) {
+      prompt = promptPrefix + prompt;
+    }
   }
 
   var button = document.getElementById('generate');
