@@ -41,13 +41,13 @@ document.getElementById('generate').addEventListener('click', function() {
     }
   }
 
-  var button = document.getElementById('generate');
-  button.disabled = true;
-  button.classList.add('spinner');
-  
   var numImages = parseInt(document.getElementById('numImages').value, 10);
 
   Array.from({ length: numImages }, (_, i) => i + 1).forEach(function() {
+    var imageWrapper = document.createElement('div');
+    imageWrapper.classList.add('spinner');
+    document.getElementById('images').prepend(imageWrapper);
+  
     fetch('/generate-image', {
       method: 'POST',
       headers: {
@@ -57,11 +57,9 @@ document.getElementById('generate').addEventListener('click', function() {
     })
     .then(response => response.json())
     .then(data => {
-      button.disabled = false;
-      button.classList.remove('spinner');
-
-      var imageWrapper = document.createElement('div');
+      imageWrapper.classList.remove('spinner');
       imageWrapper.classList.add('image-wrapper');
+
       if (data.error) {
         imageWrapper.innerHTML = `<p class="error-wrapper">Oops, OpenAI says "${data.error.message}" (Code: ${data.error.code}).</p><p>Your prompt was "<strong>${prompt}</strong>", though the issue may also have been in the unknowable OpenAI-auto-revised prompt.</p>`;
       }
@@ -69,17 +67,15 @@ document.getElementById('generate').addEventListener('click', function() {
         imageWrapper.setAttribute('data-id', data.id); 
         imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, false);
       }
-      document.getElementById('images').prepend(imageWrapper);
-
+  
     })
     .catch(error => {
       console.log(error);
-      button.disabled = false;
-      button.classList.remove('spinner');
+      imageWrapper.classList.remove('spinner');
+      imageWrapper.innerHTML = `<p class="error-wrapper">Error generating image.</p>`;
     });
   });
 });
-
 
 document.addEventListener('click', function(event) {
   if (event.target.classList.contains('delete-btn')) {
@@ -114,6 +110,9 @@ document.getElementById('images').addEventListener('click', function(event) {
 });
 
 function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
+  style = capitalize(style);
+  quality = capitalize(quality);
+
   const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
   return `
         <img src="${imageUrl}" alt="" ${loadingAttribute} class="generatedImage">
@@ -124,10 +123,14 @@ function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id
           <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
         </p>
 
-        <p><span class="creationSettings">${style} style, ${quality} quality</span>
-          <button class="delete-btn" data-id="${id}">Delete image</button>
+        <p><span class="creationSettings">${style} Style, ${quality} Quality</span>
+          <button class="delete-btn" data-id="${id}">🗑 Delete</button>
         </p>
   `;
+}
+
+function capitalize(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
 function copyToClipboard(btnElement) {

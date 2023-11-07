@@ -80,6 +80,17 @@ h1 {
   margin: auto;
   font-size: 1.25em;
   min-width: 120px;
+  border: 1px solid #aaa;
+  border-bottom: 1px solid #000;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+.delete-btn {
+  margin-left: 10px;
+  border: 1px solid #aaa;
+  border-bottom: 1px solid #000;
+  border-radius: 3px;
 }
 
 #useExactPrompt {
@@ -137,24 +148,23 @@ label[for="useExactPrompt"] {
   animation: background-fade 1s;
 }
 
-@keyframes spinner {
-  to { transform: rotate(360deg); }
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border-left-color: #09f;
+  animation: spin 1s ease infinite;
+  display: block;
+  margin: auto;
+  margin-top: 20px;
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.spinner::before {
-  content: '';
-  box-sizing: border-box;
-  position: absolute;
-  top: 50px;
-  left: 50%;
-  width: 20px;
-  height: 20px;
-  margin-top: -10px;
-  margin-left: -10px;
-  border-radius: 50%;
-  border: 2px solid #ccc;
-  border-top-color: #333;
-  animation: spinner .6s linear infinite;
-  background-color: white;
-  padding: 20px;
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
+
+
