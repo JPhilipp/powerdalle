@@ -6,8 +6,10 @@ const app = express();
 const PORT = 3000;
 const axios = require('axios');
 const crypto = require('crypto');
-
 require('dotenv').config();
+
+const sqlite3 = require('sqlite3').verbose();
+const db = new sqlite3.Database('./database.sqlite');
 
 app.use(express.json());
 app.use(express.static('public'));
@@ -15,11 +17,27 @@ app.use(express.static('public'));
 const allowedStyles = ['vivid', 'natural'];
 
 
+db.serialize(() => {
+  db.run(`
+    CREATE TABLE IF NOT EXISTS images (
+      id INTEGER PRIMARY KEY,
+      imageUrl TEXT,
+      prompt TEXT,
+      revisedPrompt TEXT,
+      style TEXT,
+      size TEXT,
+      quality TEXT,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
+    )
+  `);
+});
+
+
 app.post('/generate-image', async (req, res) => {
 
-  const { prompt, style, resolution, quality } = req.body;
+  const { prompt, style, size, quality } = req.body;
   
-  console.log(`Now working on received prompt "${prompt}" with style "${style}", resolution "${resolution}", and quality "${quality}"`);
+  console.log(`Now working on received prompt "${prompt}" with style "${style}", size "${size}", and quality "${quality}"`);
 
   if (!allowedStyles.includes(style)) {
     return res.status(400).send('Invalid style value provided.');
@@ -35,7 +53,7 @@ app.post('/generate-image', async (req, res) => {
       body: JSON.stringify({
         prompt: prompt,
         n: 1,
-        size: resolution,
+        size: size,
         style: style,
         quality: quality,
         model: "dall-e-3"
@@ -50,6 +68,7 @@ app.post('/generate-image', async (req, res) => {
     const imageUrl = data.data[0].url;
     const revisedPrompt = data.data[0].revised_prompt;
     let filename;
+    let localImageUrl;
     
     axios({
         method: 'get',
@@ -61,17 +80,21 @@ app.post('/generate-image', async (req, res) => {
         const guid = crypto.randomBytes(4).toString('hex');
         const dateTime = getFormattedDateTime();
         
-        const filenameBase = `${dateTime}-${style}-${quality}-${resolution}-${guid}`;
-        filename = `${filenameBase}.png`;
+        const filename = `${dateTime}-${guid}.png`;
         const filepath = path.join(__dirname, 'images', filename);
-        const promptPath = path.join(__dirname, 'images', `${filenameBase}.prompt`);
-        
+        localImageUrl = `/images/${filename}`;
+
         const writer = fs.createWriteStream(filepath);
         response.data.pipe(writer);
         
         return new Promise((resolve, reject) => {
           writer.on('finish', () => {
-            fs.writeFileSync(promptPath, prompt + '\n---\n' + revisedPrompt);
+
+            db.run(`
+              INSERT INTO images (imageUrl, prompt, revisedPrompt, style, size, quality) 
+              VALUES (?, ?, ?, ?, ?, ?)`, 
+              [localImageUrl, prompt, revisedPrompt, style, size, quality]);
+
             resolve();
           });
           writer.on('error', reject);
@@ -79,7 +102,7 @@ app.post('/generate-image', async (req, res) => {
 
       })
       .then(() => {
-        res.json({ imageUrl: `/images/${filename}`, revisedPrompt: revisedPrompt });
+        res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt });
       })
       .catch(error => {
         console.error('Error downloading or saving image:', error);
@@ -94,24 +117,26 @@ app.post('/generate-image', async (req, res) => {
 
 
 app.get('/images-data', async (req, res) => {
-  const imagesDir = path.join(__dirname, 'images');
-  fs.readdir(imagesDir, (err, files) => {
+  const query = `
+    SELECT imageUrl, prompt, revisedPrompt, style, size, quality 
+    FROM images 
+    ORDER BY createdAt DESC
+  `;
+
+  db.all(query, [], (err, rows) => {
     if (err) {
-      return res.status(500).json({ message: 'Unable to read images directory' });
+      console.error(err.message);
+      res.status(500).json({ message: 'Error querying the database' });
+    } else {
+      res.json(rows.map(row => ({
+        imageUrl: row.imageUrl,
+        prompt: row.prompt,
+        revisedPrompt: row.revisedPrompt,
+        style: row.style,
+        size: row.size,
+        quality: row.quality
+      })));
     }
-
-    const imageFiles = files.filter(file => file.endsWith('.png')).sort().reverse();
-
-    const imagesData = imageFiles.map(filename => {
-      const promptFile = filename.replace('.png', '.prompt');
-      const promptPath = path.join(imagesDir, promptFile);
-      const prompt = fs.readFileSync(promptPath, 'utf8');
-      const imageUrl = `/images/${filename}`;
-
-      return { imageUrl, prompt };
-    });
-
-    res.json(imagesData);
   });
 });
 
@@ -125,6 +150,15 @@ app.listen(PORT, () => {
     fs.mkdirSync(imagesDir);
   }
 });
+
+
+process.on('SIGINT', () => {
+  db.close(() => {
+    console.log('Database connection closed due to app termination');
+    process.exit(0);
+  });
+});
+
 
 function getFormattedDateTime() {
     const pad = (number) => number < 10 ? `0${number}` : number;

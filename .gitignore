@@ -21,3 +21,4 @@ dist/
 *.zip
 *.tmp
 *.temp
+*.sqlite

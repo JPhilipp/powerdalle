@@ -6,16 +6,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
       imagesDiv.innerHTML = '';
 
       data.forEach(item => {
-        const parts = item.prompt.split('\n---\n');
-        const prompt = parts[0];
-        const revisedPrompt = parts[1] || '';
-
         const imageWrapper = document.createElement('div');
         imageWrapper.classList.add('image-wrapper');
         imageWrapper.innerHTML = `
           <img src="${item.imageUrl}" alt="">
-          <p>${prompt}</p>
-          <p><em>${revisedPrompt}</em></p>
+          <p>${item.prompt}</p>
+          <p><em>${item.revisedPrompt}</em></p>
         `;
         imagesDiv.appendChild(imageWrapper);
       });
@@ -29,7 +25,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 document.getElementById('generate').addEventListener('click', function() {
   var prompt = document.getElementById('prompt').value;
   var style = document.getElementById('style').value;
-  var resolution = document.getElementById('resolution').value;
+  var size = document.getElementById('size').value;
   var quality = document.getElementById('quality').value;
   var useExactPrompt = document.getElementById('useExactPrompt').checked;
 
@@ -54,7 +50,7 @@ document.getElementById('generate').addEventListener('click', function() {
       headers: {
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({ prompt, style, resolution, quality })
+      body: JSON.stringify({ prompt, style, size, quality })
     })
     .then(response => response.json())
     .then(data => {
