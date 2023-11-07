@@ -26,7 +26,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 
-
 document.getElementById('generate').addEventListener('click', function() {
   var prompt = document.getElementById('prompt').value;
   var style = document.getElementById('style').value;

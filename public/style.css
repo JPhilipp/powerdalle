@@ -66,7 +66,7 @@ h1 {
 
 .form-group {
   flex: 1;
-  min-width: 80px; /* This prevents the .form-group from being too small */
+  min-width: 80px;
   margin: 0 10px;
 }
 
@@ -79,7 +79,7 @@ h1 {
 
 #useExactPrompt {
   display: inline-block;
-  margin-right: 5px; /* Adjust the space between the checkbox and the label */
+  margin-right: 5px;
 }
 
 label[for="useExactPrompt"] {
