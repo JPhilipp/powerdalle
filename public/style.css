@@ -86,6 +86,15 @@ label[for="useExactPrompt"] {
   display: inline;
 }
 
+.footnote {
+  text-align: center;
+}
+
+.footnote a,
+.footnote a:visited {
+  color: #555;
+} 
+
 @keyframes spinner {
   to { transform: rotate(360deg); }
 }
