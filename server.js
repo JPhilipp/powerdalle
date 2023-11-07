@@ -15,6 +15,7 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const allowedStyles = ['vivid', 'natural'];
+const model = "dall-e-3";
 
 
 db.serialize(() => {
@@ -27,6 +28,7 @@ db.serialize(() => {
       style TEXT,
       size TEXT,
       quality TEXT,
+      model TEXT,
       createdAt DATETIME DEFAULT CURRENT_TIMESTAMP
     )
   `);
@@ -56,7 +58,7 @@ app.post('/generate-image', async (req, res) => {
         size: size,
         style: style,
         quality: quality,
-        model: "dall-e-3"
+        model: model
       }),
     });
 
@@ -91,9 +93,9 @@ app.post('/generate-image', async (req, res) => {
           writer.on('finish', () => {
 
             db.run(`
-              INSERT INTO images (imageUrl, prompt, revisedPrompt, style, size, quality) 
-              VALUES (?, ?, ?, ?, ?, ?)`, 
-              [localImageUrl, prompt, revisedPrompt, style, size, quality]);
+              INSERT INTO images (imageUrl, prompt, revisedPrompt, style, size, quality, model) 
+              VALUES (?, ?, ?, ?, ?, ?, ?)`, 
+              [localImageUrl, prompt, revisedPrompt, style, size, quality, model]);
 
             resolve();
           });
