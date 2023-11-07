@@ -97,6 +97,35 @@ label[for="useExactPrompt"] {
   color: #555;
 } 
 
+.copyToClipboard {
+  border: 0;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.copyToClipboard:hover {
+  background-color: #fff;
+}
+
+.copyToClipboard span {
+  color: #999;
+  font-weight: bold;
+}
+
+.creationSettings {
+  color: #555;
+  font-style: italic;
+}
+
+@keyframes background-fade {
+  from { background-color: green; }
+  to { background-color: initial; }
+}
+
+.copy-success {
+  animation: background-fade 1s;
+}
+
 @keyframes spinner {
   to { transform: rotate(360deg); }
 }

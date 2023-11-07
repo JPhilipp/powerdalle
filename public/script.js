@@ -72,7 +72,7 @@ document.getElementById('generate').addEventListener('click', function() {
 
 document.addEventListener('click', function(event) {
   if (event.target.classList.contains('delete-btn')) {
-    const confirmed = confirm('Are you sure you want to delete this image?');
+    const confirmed = confirm('Delete image?');
     if (confirmed) {
       const imageWrapper = event.target.closest('.image-wrapper');
       const imageId = imageWrapper.getAttribute('data-id');
@@ -97,11 +97,26 @@ document.addEventListener('click', function(event) {
 
 
 function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id) {
-    return `
+  return `
         <img src="${imageUrl}" alt="">
-        <p>${prompt}<br>
-          (${style} style, ${quality} quality)</p>
-        <p>Revised prompt: <em>${revisedPrompt}</em></p>
-        <button class="delete-btn">Delete image</button>
-      `;
+        <p>${prompt}
+          <br><button onclick="copyToClipboard('${prompt}', this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
+        </p>
+        <p>${revisedPrompt}
+          <br><button onclick="copyToClipboard('${revisedPrompt}', this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
+        </p>
+
+        <p><span class="creationSettings">${style} style, ${quality} quality</span>
+          <button class="delete-btn" data-id="${id}">Delete image</button>
+        </p>
+  `;
+}
+
+function copyToClipboard(textToCopy, btnElement) {
+  navigator.clipboard.writeText(textToCopy).then(() => {
+      btnElement.classList.add('copy-success');
+      setTimeout(() => btnElement.classList.remove('copy-success'), 1000);
+  }).catch(err => {
+      console.error('Failed to copy text to clipboard', err);
+  });
 }
