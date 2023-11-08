@@ -78,7 +78,7 @@ document.getElementById('generate').addEventListener('click', function() {
 });
 
 document.addEventListener('click', function(event) {
-  if (event.target.classList.contains('delete-btn')) {
+  if (event.target.classList.contains('deleteButton')) {
     const confirmed = confirm('Delete image?');
     if (confirmed) {
       const imageWrapper = event.target.closest('.image-wrapper');
@@ -89,7 +89,7 @@ document.addEventListener('click', function(event) {
       })
       .then(response => response.json())
       .then(data => {
-        if (data.message === 'Image data deleted successfully') {
+        if (data.message === 'Image deleted') {
           imageWrapper.remove();
         } else {
           alert('Error deleting image');
@@ -109,25 +109,6 @@ document.getElementById('images').addEventListener('click', function(event) {
   }
 });
 
-function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
-  style = capitalize(style);
-  quality = capitalize(quality);
-
-  const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
-  return `
-        <img src="${imageUrl}" alt="" ${loadingAttribute} class="generatedImage">
-        <p>${prompt}
-          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
-        </p>
-        <p>${revisedPrompt}
-          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
-        </p>
-
-        <p><span class="creationSettings">${style} Style, ${quality} Quality</span>
-          <button class="delete-btn" data-id="${id}">🗑 Delete</button>
-        </p>
-  `;
-}
 
 function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
   style = capitalize(style);

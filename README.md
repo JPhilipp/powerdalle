@@ -15,3 +15,7 @@ _As you scroll down, your older creations also show._
 5. Open http://localhost:3000 in your browser. Have fun!
 
 _This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI costs dashboard](https://platform.openai.com/usage) and the [pricing table](https://openai.com/pricing))._
+
+# Options
+
+Info such as the prompt used are stored in a local database. If you want to additionally save a JSON file with such info with each image, add this to your ".env" file: SAVE_JSON_WITH_IMAGES=true

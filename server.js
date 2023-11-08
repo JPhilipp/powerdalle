@@ -16,7 +16,7 @@ app.use(express.static('public'));
 
 const allowedStyles = ['vivid', 'natural'];
 const model = "dall-e-3";
-
+const saveJsonWithImages = process.env.SAVE_JSON_WITH_IMAGES === 'true';
 
 db.serialize(() => {
   db.run(`
@@ -86,8 +86,9 @@ app.post('/generate-image', async (req, res) => {
 
     const imageUrl = data.data[0].url;
     const revisedPrompt = data.data[0].revised_prompt;
-    let filename;
     let localImageUrl;
+    let dateTime;
+    let guid;
     
     axios({
         method: 'get',
@@ -96,8 +97,8 @@ app.post('/generate-image', async (req, res) => {
       })
       .then(function (response) {
 
-        const guid = crypto.randomBytes(4).toString('hex');
-        const dateTime = getFormattedDateTime();
+        dateTime = getFormattedDateTime();
+        guid = crypto.randomBytes(4).toString('hex');
         
         const filename = `${dateTime}-${guid}.png`;
         const filepath = path.join(__dirname, 'images', filename);
@@ -128,7 +129,33 @@ app.post('/generate-image', async (req, res) => {
 
       })
       .then(lastID => {
-        res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt, id: lastID });
+
+        if (saveJsonWithImages) {
+          const jsonFilename = `${dateTime}-${guid}.json`;
+          const jsonFilepath = path.join(__dirname, 'images', jsonFilename);
+          const jsonData = JSON.stringify({
+            prompt: prompt,
+            revisedPrompt: revisedPrompt,
+            style: style,
+            size: size,
+            quality: quality,
+            model: model
+          }, null, 2);
+
+          fs.writeFile(jsonFilepath, jsonData, err => {
+            if (err) {
+              console.error('Error saving Json file:', err);
+              res.status(500).send('Error saving Json file');
+            } else {
+              console.log('Json file saved successfully.');
+              res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt, id: lastID });
+            }
+          });
+        }
+        else {
+          res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt, id: lastID });
+        }
+
       })
       .catch(error => {
         console.error('Error downloading or saving image:', error);
@@ -179,20 +206,30 @@ app.delete('/delete-image/:id', (req, res) => {
       return res.status(404).json({ message: 'Image not found' });
     }
 
-    const filePath = path.join(__dirname, row.imageUrl);
-    fs.unlink(filePath, (err) => {
+    const imageFilePath = path.join(__dirname, row.imageUrl);
+    const jsonFilePath = imageFilePath.replace('.png', '.json');
+
+    fs.unlink(imageFilePath, (err) => {
       if (err) {
+        console.log(err);
         return res.status(500).json({ message: 'Error deleting image file' });
       }
 
-      const deleteStmt = db.prepare("DELETE FROM images WHERE id = ?");
-      deleteStmt.run(id, function (err) {
-        deleteStmt.finalize();
-        if (err) {
-          res.status(500).json({ message: 'Error deleting image data from database' });
-        } else {
-          res.json({ message: 'Image data deleted successfully', id: id });
+      fs.unlink(jsonFilePath, (err) => {
+        if (err && err.code !== 'ENOENT') {
+          console.log(err);
+          return res.status(500).json({ message: 'Error deleting JSON file' });
         }
+
+        const deleteStmt = db.prepare("DELETE FROM images WHERE id = ?");
+        deleteStmt.run(id, function (err) {
+          deleteStmt.finalize();
+          if (err) {
+            res.status(500).json({ message: 'Error deleting image data from database' });
+          } else {
+            res.json({ message: 'Image deleted', id: id });
+          }
+        });
       });
     });
   });
