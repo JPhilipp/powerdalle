@@ -129,6 +129,34 @@ function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id
   `;
 }
 
+function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
+  style = capitalize(style);
+  quality = capitalize(quality);
+
+  const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
+  return `
+        <img src="${imageUrl}" alt="" ${loadingAttribute} id="image-${id}" class="generatedImage" data-angle="0">
+        <p>${prompt}
+          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
+        </p>
+        <p>${revisedPrompt}
+          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
+        </p>
+        <p><span class="creationSettings">${style} Style, ${quality} Quality</span>
+        <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
+        <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
+        </p>
+  `;
+}
+
+function rotateImage(id) {
+  const image = document.getElementById(id);
+  const currentAngle = image.getAttribute('data-angle') || '0';
+  const newAngle = (parseInt(currentAngle) + 90) % 360;
+  image.style.transform = `rotate(${newAngle}deg)`;
+  image.setAttribute('data-angle', newAngle.toString());
+}
+
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
