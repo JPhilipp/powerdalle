@@ -113,6 +113,7 @@ document.getElementById('images').addEventListener('click', function(event) {
 function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
   style = capitalize(style);
   quality = capitalize(quality);
+  if (!revisedPrompt) { revisedPrompt = "(none)"; }
 
   const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
   return `
