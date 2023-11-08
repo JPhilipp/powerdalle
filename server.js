@@ -15,8 +15,10 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const allowedStyles = ['vivid', 'natural'];
-const model = "dall-e-3";
+const model = process.env.MODEL ? process.env.MODEL : "dall-e-3";
 const saveJsonWithImages = process.env.SAVE_JSON_WITH_IMAGES === 'true';
+
+console.log("Model set to:", model);
 
 db.serialize(() => {
   db.run(`
@@ -153,7 +155,7 @@ app.post('/generate-image', async (req, res) => {
           });
         }
         else {
-          res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt, id: lastID });
+          res.json({ imageUrl: localImageUrl, revisedPrompt: revisedPrompt, id: lastID, model: model });
         }
 
       })
@@ -171,7 +173,7 @@ app.post('/generate-image', async (req, res) => {
 
 app.get('/images-data', async (req, res) => {
   const query = `
-    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality 
+    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model 
     FROM images 
     ORDER BY createdAt DESC
   `;
@@ -188,7 +190,8 @@ app.get('/images-data', async (req, res) => {
         revisedPrompt: row.revisedPrompt,
         style: row.style,
         size: row.size,
-        quality: row.quality
+        quality: row.quality,
+        model: row.model
       })));
     }
   });

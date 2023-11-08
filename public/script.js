@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         imageWrapper.setAttribute('data-id', item.id); 
 
         var doLazyLoad = index > 10;
-        imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id, doLazyLoad);
+        imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id, item.model, doLazyLoad);
 
         imagesDiv.appendChild(imageWrapper);
       });
@@ -65,7 +65,7 @@ document.getElementById('generate').addEventListener('click', function() {
       }
       else {
         imageWrapper.setAttribute('data-id', data.id); 
-        imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, false);
+        imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, data.model, false);
       }
   
     })
@@ -110,9 +110,12 @@ document.getElementById('images').addEventListener('click', function(event) {
 });
 
 
-function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, doLazyLoad) {
-  style = capitalize(style);
-  quality = capitalize(quality);
+function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, model, doLazyLoad) {
+  const defaultModel = 'dall-e-3';
+
+  var settingsInfo = capitalize(style) + " Style, " + capitalize(quality) + " Quality";
+  if (model && model != defaultModel) { settingsInfo += ", Model: " + model; }
+
   if (!revisedPrompt) { revisedPrompt = "(none)"; }
 
   const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
@@ -124,7 +127,7 @@ function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id
         <p>${revisedPrompt}
           <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
         </p>
-        <p><span class="creationSettings">${style} Style, ${quality} Quality</span>
+        <p><span class="creationSettings">${settingsInfo}</span>
         <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
         <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
         </p>

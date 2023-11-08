@@ -19,3 +19,5 @@ _This project makes no guarantees for being bug-free, use at your own risk, and 
 # Options
 
 Info such as the prompt used are stored in a local database. If you want to additionally save a JSON file with such info with each image, add this to your ".env" file: SAVE_JSON_WITH_IMAGES=true
+
+To switch from default model "dall-e-3" to another, add e.g. this to the ".env" file and restart the server (though size dropdowns and such will only properly work for the default model): MODEL=dall-e-2
