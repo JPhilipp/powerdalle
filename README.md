@@ -6,6 +6,10 @@ This app does not connect to any server outside of your local one and OpenAI. Be
 ![Screenshot](screenshot.png)
 _As you scroll down, your older creations also show._
 
+[![Video](thumb.png)](https://www.youtube.com/watch?v=2afhxu7XD5Q)
+
+_Overview video_
+
 # Installation
 
 1. Ensure you have [Node.js](https://nodejs.org) installed.
