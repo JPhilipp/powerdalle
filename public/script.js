@@ -77,6 +77,7 @@ document.getElementById('generate').addEventListener('click', function() {
   });
 });
 
+
 document.addEventListener('click', function(event) {
   if (event.target.classList.contains('deleteButton')) {
     const confirmed = confirm('Delete image?');
