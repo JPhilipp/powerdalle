@@ -15,10 +15,9 @@ app.use(express.json());
 app.use(express.static('public'));
 
 const allowedStyles = ['vivid', 'natural'];
-const model = process.env.MODEL ? process.env.MODEL : "dall-e-3";
+const defaultModel = "dall-e-3";
+const model = process.env.MODEL ? process.env.MODEL : defaultModel;
 const saveJsonWithImages = process.env.SAVE_JSON_WITH_IMAGES === 'true';
-
-console.log("Model set to:", model);
 
 db.serialize(() => {
   db.run(`
