@@ -15,8 +15,9 @@ _Overview video_
 1. Ensure you have [Node.js](https://nodejs.org) installed.
 2. Load this git project onto your local drive.
 3. Create a name-less file ".env" in the project root and put into it [your OpenAI API](https://platform.openai.com/api-keys) key by writing: _OPENAI_API_KEY=yourapikey_
-4. Navigate to the project via the command line, and type *node server.js*
-5. Open http://localhost:3000 in your browser. Have fun!
+4. Navigate to the project via the command line, and type *npm install*
+5. Then in the same command line, type *npm start*
+6. Open http://localhost:3000 in your browser. Have fun!
 
 _This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI costs dashboard](https://platform.openai.com/usage) and the [pricing table](https://openai.com/pricing))._
 
@@ -25,3 +26,5 @@ _This project makes no guarantees for being bug-free, use at your own risk, and 
 Info such as the prompt used are stored in a local database. If you want to additionally save a JSON file with such info with each image, add this to your ".env" file: SAVE_JSON_WITH_IMAGES=true
 
 To switch from default model "dall-e-3" to another, add e.g. this to the ".env" file and restart the server (though size dropdowns and such will only properly work for the default model): MODEL=dall-e-2
+
+To make successive starts and editing of the app easier, consider, on Windows, adding a file "start.bat" with the content *nodemon server.js* (run "npm install -g nodemon" if you don't have nodemon installed). This will monitor the server for changes you make to server scripts and restart if needed.
