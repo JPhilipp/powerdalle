@@ -25,8 +25,11 @@ _This project makes no guarantees for being bug-free, use at your own risk, and 
 
 # Options
 
-Info such as the prompt used are stored in a local database. If you want to additionally save a JSON file with such info with each image, add this to your ".env" file: SAVE_JSON_WITH_IMAGES=true
+Info such as the prompt used are stored in a local database. If you want to additionally save a JSON file with such info with each image, add this to your ".env" file:  
+SAVE_JSON_WITH_IMAGES=true
 
-To switch from default model "dall-e-3" to another, add e.g. this to the ".env" file and restart the server (though size dropdowns and such will only properly work for the default model): MODEL=dall-e-2
+To switch from default model "dall-e-3" to another, add e.g. this to the ".env" file and restart the server (though size dropdowns and such will only properly work for the default model):  
+MODEL=dall-e-2
 
-To make successive starts and editing of the app easier, consider, on Windows, adding a file "start.bat" with the content *nodemon server.js* (run "npm install -g nodemon" if you don't have nodemon installed). This will monitor the server for changes you make to server scripts and restart if needed.
+To change the maximum number of images served at the start (the default is 1000), use e.g.:  
+MAX_IMAGES_TO_SERVE_AT_START=2000

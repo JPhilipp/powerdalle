@@ -19,6 +19,9 @@ const defaultModel = "dall-e-3";
 const model = process.env.MODEL ? process.env.MODEL : defaultModel;
 const saveJsonWithImages = process.env.SAVE_JSON_WITH_IMAGES === 'true';
 
+const parsedMaxImagesValue = parseInt(process.env.MAX_IMAGES_TO_SERVE_AT_START, 10);
+const maxImagesToServeAtStart = parsedMaxImagesValue > 0 ? parsedMaxImagesValue : 1000;
+
 db.serialize(() => {
   db.run(`
     CREATE TABLE IF NOT EXISTS images (
@@ -172,9 +175,10 @@ app.post('/generate-image', async (req, res) => {
 
 app.get('/images-data', async (req, res) => {
   const query = `
-    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model 
-    FROM images 
+    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model
+    FROM images
     ORDER BY createdAt DESC
+    LIMIT ${maxImagesToServeAtStart}
   `;
 
   db.all(query, [], (err, rows) => {
