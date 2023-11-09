@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         imageWrapper.setAttribute('data-id', item.id); 
 
         var doLazyLoad = index > 10;
-        imageWrapper.innerHTML = GetImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id, item.model, doLazyLoad);
+        imageWrapper.innerHTML = getImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id, item.model, doLazyLoad);
 
         imagesDiv.appendChild(imageWrapper);
       });
@@ -65,7 +65,7 @@ document.getElementById('generate').addEventListener('click', function() {
       }
       else {
         imageWrapper.setAttribute('data-id', data.id); 
-        imageWrapper.innerHTML = GetImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, data.model, false);
+        imageWrapper.innerHTML = getImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, data.model, false);
       }
   
     })
@@ -111,8 +111,10 @@ document.getElementById('images').addEventListener('click', function(event) {
 });
 
 
-function GetImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, model, doLazyLoad) {
+function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, model, doLazyLoad) {
   const defaultModel = 'dall-e-3';
+
+  if (quality == 'hd') { quality = quality.toUpperCase(); }
 
   var settingsInfo = capitalize(style) + " Style, " + capitalize(quality) + " Quality";
   if (model && model != defaultModel) { settingsInfo += ", Model: " + model; }
