@@ -9,7 +9,6 @@ This app does not connect to any server outside of your local one and OpenAI. Be
 _As you scroll down, your older creations also show._
 
 [![Video](docs/thumb.png)](https://www.youtube.com/watch?v=2afhxu7XD5Q)
-
 _Overview video_
 
 # Installation
@@ -28,7 +27,6 @@ _This project makes no guarantees for being bug-free, use at your own risk, and 
 Power Dall-E is integrated with Prompt Inspirer (also available at [PromptInspirer.com](https://promptinspirer.com/)), which includes over 10,000 items you can drag & drop together to make prompts.
 
 [![Video](docs/thumb-inspirer.png)](https://www.youtube.com/watch?v=g2T3LDPkV-0)
-
 _Prompt Inspirer overview video_
 
 # Options
