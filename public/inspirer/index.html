@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-JRN5BHJSKH"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-JRN5BHJSKH');
+  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt Inspirer</title>
+  <link rel="stylesheet" href="style.css?v=9">
+</head>
+<body>
+
+<div id="prompt-studio">
+  <div id="promptWrapper">
+    <div id="logo"><span class="logoEmoji">💡</span> <span class="aboutLink" onclick="showAbout()">Prompt Inspirer</span></div>
+    <textarea id="prompt" rows="3" readonly></textarea>
+    <div id="copyPrompt" onclick="copyPromptToClipboard()">📋 <span>Copy</span></div>
+  </div>
+
+  <div id="stage">
+    <div class="stageSection" id="stageBackground">Background</div>
+    <div class="stageSection" id="stageSubject">Subject</div>
+    <div class="stageSection" id="stageForeground">Foreground ⬅️🎦</div>
+  </div>
+  
+  <div id="categories">
+  </div>
+  
+  <div id="objects">
+    <div class="object-group" data-category="custom">
+      <div class="subGroupTitle forCustomUse">✨ Custom</div>
+      <div class="toolButton forCustomUse" onclick="promptForNewStageObject()">➕&nbsp;<span>Add Item</span></div>
+      <div class="toolButton forCustomUse" onclick="removeCustomStageObjects()">🧹&nbsp;<span>Remove Items</span></div>
+      <div id="customStageObjects" class="forCustomUse"></div>
+      <hr class="forCustomUse">
+
+      <div class="subGroupTitle">🔧 Tools</div>
+      <div class="toolButton" onclick="clearStage()" id="clearStageButton">🧹&nbsp;<span>Clear Stage</span></div>
+      <div class="toolButton" onclick="addRandomStageObjects()">🎲&nbsp;<span>Random Items</span></div>
+      <div id="randomStageObjects"></div>
+      <hr>
+
+      <div class="subGroupTitle">⌚ Recent</div>
+      <div class="toolButton" onclick="clearRecentStageObjects()">🧹&nbsp;<span>Clear</span></div>
+      <div id="recentStageObjects"></div>
+      <hr>
+      
+      <div class="subGroupTitle" id="subGroupSearch">🕵️ Search</div>
+      <div class="toolButton" onclick="searchStageObjectsInCategories()">🔍&nbsp;<span>Search Items</span></div>
+      <div id="searchResultStageObjects"></div>
+    </div>
+  </div>
+</div>
+
+<div id="close-button-if-iframed" onclick="closeIfIframed()">&times;</div>
+
+<script src="categories.js?v=9"></script>
+<script src="script.js?v=9"></script>
+
+</body>
+</html>

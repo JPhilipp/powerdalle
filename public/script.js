@@ -1,3 +1,5 @@
+const inspirerId = 'inspirer';
+
 document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/images-data')
     .then(response => response.json())
@@ -189,3 +191,55 @@ function redoPrompt(btnElement, style, quality, size) {
   document.getElementById('generate').click();
   window.scrollTo(0, 0);
 }
+
+function togglePromptInspirer() {
+  let currentIframe = document.getElementById('inspirer');
+  if (!currentIframe) {
+    const iframe = document.createElement('iframe');
+    iframe.setAttribute('src', 'inspirer/');
+    iframe.setAttribute('id', inspirerId);
+    iframe.setAttribute('title', 'Inspirer');
+
+    document.body.appendChild(iframe);
+
+
+    var backdrop = document.createElement('div');
+    backdrop.id= 'backdrop';
+  
+    var closeFunction = function() {
+      setInspirerDisplay('none');
+    };
+    backdrop.addEventListener('click', closeFunction);
+    document.body.appendChild(backdrop);
+  }
+  else if (currentIframe.style.display != 'none') {
+    setInspirerDisplay('none');
+  }
+  else {
+    setInspirerDisplay('block');
+  }
+}
+
+
+function setInspirerDisplay(styleValue) {
+  [inspirerId, 'backdrop'].forEach(function(id) {
+    document.getElementById(id).style.display = styleValue;
+  });
+}
+
+window.addEventListener('message', function(e) {
+  let data = e.data;
+  console.log('Message received', data);
+  if (data.type) {
+    let content = data.content;
+    switch (data.type) {
+      case 'promptUpdated':
+        document.getElementById('prompt').value = content;
+        break;
+
+      case 'close':
+        setInspirerDisplay('none');
+        break;
+    }
+  }
+});

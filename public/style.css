@@ -112,7 +112,12 @@ label[for="useExactPrompt"] {
 .extraLinks a,
 .extraLinks a:visited {
   color: #888;
-} 
+  text-decoration: none;
+}
+
+.extraLinks a span {
+  text-decoration: underline;
+}
 
 .copyToClipboard {
   border: 0;
@@ -180,4 +185,33 @@ a.additionalButtonsLink {
 
 .redoPrompt {
   margin-left: 20px;
+}
+
+#inspirer {
+  position: absolute;
+  bottom: 3%;
+  left: 5%;
+  width: 90%;
+  height: 80%;
+  z-index: 1000;
+  border-radius: 10px;
+  box-shadow: 0 3px 7px rgba(0,0,0,0.3);
+  overflow: hidden;
+}
+
+#backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.2);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 900;
+}
+
+#inspirerLink {
+  font-weight: bold;
 }
