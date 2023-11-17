@@ -256,10 +256,11 @@ body {
 
 #close-button-if-iframed {
   display: none;
+  color: #999;
 }
 
 .in-iframe #close-button-if-iframed {
-  display: none;
+  display: block;
 }
 
 #close-button-if-iframed:hover {

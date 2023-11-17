@@ -17,6 +17,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         imagesDiv.appendChild(imageWrapper);
       });
+
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          setInspirerDisplay('none');
+          window.scrollTo(0, 0);
+          document.getElementById('prompt').focus();
+        }
+      });
+
     })
     .catch(error => {
       console.error('Error fetching images:', error);
@@ -223,7 +232,10 @@ function togglePromptInspirer() {
 
 function setInspirerDisplay(styleValue) {
   [inspirerId, 'backdrop'].forEach(function(id) {
-    document.getElementById(id).style.display = styleValue;
+    let elm = document.getElementById(id);
+    if (elm) {
+      elm.style.display = styleValue;
+    }
   });
 }
 

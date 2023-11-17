@@ -172,7 +172,35 @@ document.addEventListener('DOMContentLoaded', () => {
   if (isDesktop()) {
     ensureDrageMeSampleStageObjectExists();
   }
+
+  document.getElementById('close-button-if-iframed').addEventListener('click', function() {
+    console.log("Close clicked");
+    messageParent('close');
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const customAlertBox = document.querySelector('.custom-alert-box');
+      if (!customAlertBox || customAlertBox.style.display == 'none') {
+        
+        if (!isAnyInputFocused()) {
+          messageParent('close');
+        }
+      }
+    }
+  });
 });
+
+function isAnyInputFocused() {
+  const inputElements = document.querySelectorAll('input');
+  let isInputFocused = false;
+  inputElements.forEach(element => {
+    if (element === document.activeElement) {
+      isInputFocused = true;
+    }
+  });
+  return isInputFocused;
+}
 
 function addMobileInfo() {
   let info = document.createElement("div");
@@ -1283,14 +1311,6 @@ function messageParent(messageType, optionalContent) {
       '*'
     );
   }
-}
-
-function closeIfIframed() {
-  document.getElementById('close-button-if-iframed').addEventListener('click', function() {
-    console.log("Close clicked");
-    messageParent('close');
-  });
-
 }
 
 function scrollParentBackToTop() {
