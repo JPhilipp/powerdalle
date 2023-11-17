@@ -229,7 +229,7 @@ function setInspirerDisplay(styleValue) {
 
 window.addEventListener('message', function(e) {
   let data = e.data;
-  console.log('Message received', data);
+  // console.log('Message received', data);
   if (data.type) {
     let content = data.content;
     switch (data.type) {
