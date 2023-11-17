@@ -78,7 +78,7 @@ function addCategories() {
 
       for (let item of subGroupObjects) {
         let [emoji, title] = getEmojiAndTitle(item);
-        const typeName = title.toLowerCase().replace(" ", "_");
+        const typeName = title.toLowerCase().replace(" ", "_") + "_" + titleCount;
 
         if (suppressDuplicateCategories && titles.includes(title)) {
           console.error(`Duplicate title "${title}" found in category "${category} - ${subGroupTitle}"`);
@@ -185,7 +185,7 @@ function ensureDrageMeSampleStageObjectExists() {
   let [emoji, title] = getEmojiAndTitle(dragMeText);
   let sampleStageObject = document.querySelector(`.stageObject[data-title*="${title}"]`);
   if (!sampleStageObject) {
-    addNewStageObject(dragMeText); // xxx
+    addNewStageObject(dragMeText);
   }
 }
 
@@ -485,8 +485,6 @@ function getStageSectionText(stageSectionId, prefix, category, subjectLocationOn
           let subGroupPrefix = subGroupPrefixes[obj.dataset.subGroupTitleId];
           if (subGroupPrefix) { text += subGroupPrefix; }
 
-          console.log("Title: " + obj.dataset.title);
-
           let title = obj.dataset.title;
           title = toLowerCaseUnlessKeepCase(title, obj.dataset.keepCase)
           if (stringToBool(obj.dataset.addArticle)) {
@@ -774,7 +772,7 @@ function promptForNewStageObject() {
   }
 }
 
-function addNewStageObject(text, parentNode, doShake) {
+function addNewStageObject(text, parentNode, doShake, ignoreOverride) {
   if (parentNode === undefined) {
     parentNode = document.querySelector('#customStageObjects')
   }
@@ -796,7 +794,9 @@ function addNewStageObject(text, parentNode, doShake) {
   stageObject.dataset.keepCase = false;
   stageObject.dataset.originalCategory = stageObject.dataset.category;
 
-  overrideStageObjectWithMatchingData(stageObject, text, title);
+  if (!ignoreOverride) {
+    overrideStageObjectWithMatchingData(stageObject, text, title);
+  }
 
   parentNode.appendChild(stageObject);
 
@@ -994,7 +994,7 @@ function searchStageObjectsInCategories() {
             stageObjectTitles.push(title);
             const categoryEmoji = category.split(" ")[0];
             searchResults.push(categoryEmoji + "  >  " + subGroup.title + " > " + item);
-            addNewStageObject(item, searchResultStageObjects);
+            addNewStageObject(item, searchResultStageObjects, undefined, true);
             resultCount++;
           }
         }
@@ -1084,7 +1084,8 @@ function addStageObjectToRecent(stageObject) {
     if (!textLower.includes(dragMeTextWithoutEmoji.toLowerCase()) &&
         !textLower.includes(doubleClickToEditTextWithoutEmoji.toLowerCase())
         ) {
-     addNewStageObject(text, recentStageObjects, doShake);
+      const ignoreOverride = true;
+      addNewStageObject(text, recentStageObjects, doShake, ignoreOverride);
     }
   }
 }
