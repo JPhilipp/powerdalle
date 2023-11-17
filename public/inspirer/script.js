@@ -52,6 +52,8 @@ function addCategories() {
 
         let aElement = document.createElement("a");
         aElement.href = `#${subGroupTitleId}`;
+        // After click, call scrollParentBackToTop()
+        aElement.onclick = function() { scrollParentBackToTop(); };
         let [emoji, title] = getEmojiAndTitle(subGroup.title);
         aElement.innerHTML = emoji + ' <span>' + title + '</span>';
 
@@ -1290,3 +1292,8 @@ function closeIfIframed() {
   });
 
 }
+
+function scrollParentBackToTop() {
+  messageParent('scrollBackToTop');
+}
+

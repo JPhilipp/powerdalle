@@ -237,6 +237,10 @@ window.addEventListener('message', function(e) {
         document.getElementById('prompt').value = content;
         break;
 
+      case 'scrollBackToTop':
+        window.scrollTo(0, 0);
+        break;
+
       case 'close':
         setInspirerDisplay('none');
         break;
