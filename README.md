@@ -23,6 +23,14 @@ _Overview video_
 
 _This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI costs dashboard](https://platform.openai.com/usage) and the [pricing table](https://openai.com/pricing))._
 
+# Prompt Inspirer
+
+Power Dall-E is integrated with Prompt Inspirer (also available at [PromptInspirer.com](https://promptinspirer.com/)), which includes over 10,000 items you can drag & drop together to make prompts.
+
+[![Video](thumb-inspirer.png)](https://www.youtube.com/watch?v=g2T3LDPkV-0)
+
+_Prompt Inspirer overview video_
+
 # Options
 
 Info such as the prompt used are stored in a local database. If you want to additionally save a JSON file with such info with each image, add this to your ".env" file:  
