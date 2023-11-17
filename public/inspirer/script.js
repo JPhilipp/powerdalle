@@ -1249,7 +1249,7 @@ function showAbout() {
     There's over 10,000 items you can drag onto the stage.
     <a href="https://www.youtube.com/watch?v=g2T3LDPkV-0" target="_blank">Here's an overview video</a>.
     If you have ideas for more words, categories &amp; features, please let me know!
-    This tool is also planned to integrate with
+    This tool is also open source &amp; integrated for quick local image generation
     with <a href="https://github.com/JPhilipp/powerdalle" target="_blank">Power Dall-E (GitHub)</a>.
     You can support me at my <a href="https://www.patreon.com/PhilippLenssen" target="_blank">Patreon</a>.
     </p>
