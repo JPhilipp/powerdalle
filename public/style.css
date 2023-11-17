@@ -167,4 +167,17 @@ label[for="useExactPrompt"] {
   100% { transform: rotate(360deg); }
 }
 
+.additionalButtons {
+  display: none;
+  margin-left: 30px;
+}
 
+a.additionalButtonsLink {
+  display: inline-block;
+  margin-left: 30px;
+  color: #888;
+}
+
+.redoPrompt {
+  margin-left: 20px;
+}

@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         imageWrapper.setAttribute('data-id', item.id); 
 
         var doLazyLoad = index > 10;
-        imageWrapper.innerHTML = getImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.id, item.model, doLazyLoad);
+        imageWrapper.innerHTML = getImageWrapperHTML(item.imageUrl, item.prompt, item.revisedPrompt, item.style, item.quality, item.size, item.id, item.model, doLazyLoad);
 
         imagesDiv.appendChild(imageWrapper);
       });
@@ -65,7 +65,7 @@ document.getElementById('generate').addEventListener('click', function() {
       }
       else {
         imageWrapper.setAttribute('data-id', data.id); 
-        imageWrapper.innerHTML = getImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, data.id, data.model, false);
+        imageWrapper.innerHTML = getImageWrapperHTML(data.imageUrl, prompt, data.revisedPrompt, style, quality, size, data.id, data.model, false);
       }
   
     })
@@ -111,8 +111,11 @@ document.getElementById('images').addEventListener('click', function(event) {
 });
 
 
-function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id, model, doLazyLoad) {
+function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, size, id, model, doLazyLoad) {
   const defaultModel = 'dall-e-3';
+
+  let originalStyleValue = style;
+  let originalQualityValue = quality;
 
   if (quality == 'hd') { quality = quality.toUpperCase(); }
 
@@ -125,16 +128,28 @@ function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, id
   return `
         <img src="${imageUrl}" alt="" ${loadingAttribute} id="image-${id}" class="generatedImage" data-angle="0">
         <p>${prompt}
-          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
+          <br>
+          <button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
+          <button onclick="redoPrompt(this, '${originalStyleValue}', '${originalQualityValue}', '${size}')" class="redoPrompt">&#9658; <span>Redo</span></button>
         </p>
         <p>${revisedPrompt}
           <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
         </p>
-        <p><span class="creationSettings">${settingsInfo}</span>
-        <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
-        <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
+        <p>
+          <span class="creationSettings">${settingsInfo}</span>
+          <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
+          <a href="#" class="additionalButtonsLink" onclick="showMoreOptions(event, '${id}')">More...</a>
+          <span id="additionalButtons-${id}" class="additionalButtons">
+            <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
+          </span>
         </p>
   `;
+}
+
+function showMoreOptions(event, id) {
+  event.preventDefault();
+  event.target.style.display = 'none';
+  document.getElementById(`additionalButtons-${id}`).style.display = 'inline';
 }
 
 function rotateImage(id) {
@@ -157,4 +172,20 @@ function copyToClipboard(btnElement) {
   }).catch(err => {
       console.error('Failed to copy text to clipboard', err);
   });
+}
+
+function redoPrompt(btnElement, style, quality, size) {
+  const textToRedo = btnElement.parentNode.childNodes[0].nodeValue.trim();
+  document.getElementById('prompt').value = textToRedo;
+
+  const options = {'style': style, 'quality': quality, 'size': size};
+  Object.keys(options).forEach(function(option) {
+    const optionValue = options[option];
+    const dropdown = document.getElementById(option);
+    const optionElement = Array.from(dropdown.options).find(option => option.value === optionValue);
+    dropdown.selectedIndex = optionElement.index;
+  });
+
+  document.getElementById('generate').click();
+  window.scrollTo(0, 0);
 }
