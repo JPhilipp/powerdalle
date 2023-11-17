@@ -174,7 +174,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.getElementById('close-button-if-iframed').addEventListener('click', function() {
-    console.log("Close clicked");
     messageParent('close');
   });
 
