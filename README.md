@@ -25,7 +25,7 @@ _This project makes no guarantees for being bug-free, use at your own risk, and 
 
 # Prompt Inspirer
 
-Power Dall-E is integrated with Prompt Inspirer (also available via [PromptInspirer.com](https://promptinspirer.com/)), which includes over 10,000 items you can drag & drop together to make prompts.
+Power Dall-E is integrated with Prompt Inspirer (also available at [PromptInspirer.com](https://promptinspirer.com/)), which includes over 10,000 items you can drag & drop together to make prompts.
 
 [![Video](thumb-inspirer.png)](g2T3LDPkV-0)
 
