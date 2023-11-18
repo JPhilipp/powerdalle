@@ -201,7 +201,12 @@ function redoPrompt(btnElement, style, quality, size) {
   window.scrollTo(0, 0);
 }
 
-function togglePromptInspirer() {
+function togglePromptInspirer(event) {
+  if (event.shiftKey || event.ctrlKey) {
+    window.open('inspirer/', '_blank').focus();;
+    return;
+  }
+
   let currentIframe = document.getElementById('inspirer');
   if (!currentIframe) {
     const iframe = document.createElement('iframe');

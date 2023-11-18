@@ -111,16 +111,25 @@ label[for="useExactPrompt"] {
   width: 100px;
   top: 80px;
   left: 10px;
+  user-select: none;
 }
 
 .extraLinks a,
-.extraLinks a:visited {
+.extraLinks a:visited,
+.extraLinks .pseudoLink {
   color: #888;
   text-decoration: none;
+  cursor: pointer;
 }
 
-.extraLinks a span {
+.extraLinks a span,
+.extraLinks .pseudoLink span {
   text-decoration: underline;
+}
+
+.extraLinks a:hover span,
+.extraLinks .pseudoLink:hover span {
+  color: #222;
 }
 
 .copyToClipboard {
