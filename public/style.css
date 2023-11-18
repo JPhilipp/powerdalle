@@ -245,6 +245,20 @@ a.additionalButtonsLink {
     display: none;
   }
 
+  .wrapper {
+    max-width: none;
+    margin: auto;
+    margin-top: 50px;
+    width: 97%;
+    padding: 0;
+    margin-left: 5px;
+  }
+
+  #prompt {
+    height: 120px;
+    width: 96%;
+  }
+
   .extraLinks {
     position: absolute;
     top: 5px;
@@ -252,19 +266,14 @@ a.additionalButtonsLink {
     display: flex;
     justify-content: center;
     font-size: 0.8em;
+    text-align: center;
   }
   
   .extraLink {
     margin: 0 10px;
   }
 
-  .wrapper {
-    margin-top: 30px;
-    max-width: none;
-    width: 90%;
-  }
-
   .images img.generatedImage {
-    max-height: 520px;
+    max-width: 98%;
   }
 }
