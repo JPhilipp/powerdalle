@@ -453,8 +453,9 @@ textarea#prompt {
   .forCustomUse,
   #logo,
   #prompt,
-  #copyPrompt {
-    display: none;
+  #copyPrompt,
+  #close-button-if-iframed {
+    display: none !important;
   }
 
   .object-group {
@@ -467,5 +468,9 @@ textarea#prompt {
 
   #logo {
     font-size: 1.1em;
+  }
+
+  .tab {
+    padding: 2px;
   }
 }
