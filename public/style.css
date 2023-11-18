@@ -40,6 +40,10 @@ h1 {
   width: 100%;
 }
 
+.form-group-numImages {
+  display: none;
+}
+
 .images {
   display: flex;
   flex-wrap: wrap;
