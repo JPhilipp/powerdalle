@@ -201,6 +201,15 @@ a.additionalButtonsLink {
   color: #888;
 }
 
+.promptWrapper {
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.prompt {
+  padding-bottom: 10px;
+}
+
 .redoPrompt {
   margin-left: 20px;
 }
@@ -230,7 +239,13 @@ a.additionalButtonsLink {
   z-index: 900;
 }
 
-#inspirerLink {
+#inspirerLink,
+#searchLink {
+  font-weight: bold;
+}
+
+.searchHit {
+  background-color: rgba(255, 255, 0, 0.5);
   font-weight: bold;
 }
 

@@ -242,6 +242,42 @@ app.delete('/delete-image/:id', (req, res) => {
 });
 
 
+app.post('/search', async (req, res) => {
+  const { query } = req.body;
+  const queryWithWildcards = `%${query}%`;
+
+  const maxImageToReturn = 100;
+
+  const searchQuery = `
+    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model
+    FROM images
+    WHERE prompt LIKE ? OR revisedPrompt LIKE ?
+    ORDER BY createdAt DESC
+    LIMIT ${maxImageToReturn}
+  `;
+
+  db.all(searchQuery, [queryWithWildcards], (err, rows) => {
+    if (err) {
+      console.error(err.message);
+      res.status(500).json({ message: 'Error querying the database' });
+    } else {
+      res.json({
+        results: rows.map(row => ({
+          id: row.id,
+          imageUrl: row.imageUrl,
+          prompt: row.prompt,
+          revisedPrompt: row.revisedPrompt,
+          style: row.style,
+          size: row.size,
+          quality: row.quality,
+          model: row.model
+        }))
+      });
+    }
+  });
+
+});
+
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 app.listen(PORT, () => {

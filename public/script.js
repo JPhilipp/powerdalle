@@ -121,8 +121,30 @@ document.getElementById('images').addEventListener('click', function(event) {
   }
 });
 
+function addSearchHitsMarkup(text, searchQuery) {
+  if (!text || !searchQuery) {
+    console.log("Text or search query is empty", text, searchQuery);
+    return text;
+  }
 
-function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, size, id, model, doLazyLoad) {
+  function escapeRegExp(string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  }
+
+  const escapedSearchQuery = escapeRegExp(searchQuery);
+  const regex = new RegExp(escapedSearchQuery, 'gi');
+  
+  const newText = text.replace(regex, function(match) { return `<span class="searchHit">${match}</span>`; });
+  return newText;
+}
+
+function removeSearchHitsMarkup(text) {
+  text = text.replace(/<span class="searchHit">/g, '');
+  text = text.replace(/<\/span>/g, '');
+  return text;
+}
+
+function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, size, id, model, doLazyLoad, searchQuery) {
   const defaultModel = 'dall-e-3';
 
   let originalStyleValue = style;
@@ -135,17 +157,30 @@ function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, si
 
   if (!revisedPrompt) { revisedPrompt = "(none)"; }
 
+  prompt = escapeHTML(prompt);
+  revisedPrompt = escapeHTML(revisedPrompt);
+
+  if (searchQuery) {
+    prompt        = addSearchHitsMarkup(prompt, searchQuery);
+    revisedPrompt = addSearchHitsMarkup(revisedPrompt, searchQuery);
+  }
+
   const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
   return `
         <img src="${imageUrl}" alt="" ${loadingAttribute} id="image-${id}" class="generatedImage" data-angle="0">
-        <p>${prompt}
-          <br>
-          <button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
-          <button onclick="redoPrompt(this, '${originalStyleValue}', '${originalQualityValue}', '${size}')" class="redoPrompt">&#9658; <span>Redo</span></button>
-        </p>
-        <p>${revisedPrompt}
-          <br><button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
-        </p>
+        <div class="promptWrapper">
+          <div class="prompt">${prompt}</div>
+          <div class="promptButtons">
+            <button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy prompt</span></button>
+            <button onclick="redoPrompt(this, '${originalStyleValue}', '${originalQualityValue}', '${size}')" class="redoPrompt">&#9658; <span>Redo</span></button>
+          </div>
+        </div>
+        <div class="promptWrapper">
+          <div class="prompt">${revisedPrompt}</div>
+          <div class="promptButtons">
+            <button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
+          </div>
+        </div>
         <p>
           <span class="creationSettings">${settingsInfo}</span>
           <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
@@ -176,7 +211,10 @@ function capitalize(str) {
 }
 
 function copyToClipboard(btnElement) {
-  const textToCopy = btnElement.parentNode.childNodes[0].nodeValue.trim();
+  let parentElement = btnElement.parentElement.parentElement;
+  let textToCopy = parentElement.querySelector('.prompt').innerHTML;
+  textToCopy = removeSearchHitsMarkup(textToCopy);
+
   navigator.clipboard.writeText(textToCopy).then(() => {
       btnElement.classList.add('copy-success');
       setTimeout(() => btnElement.classList.remove('copy-success'), 1000);
@@ -186,7 +224,10 @@ function copyToClipboard(btnElement) {
 }
 
 function redoPrompt(btnElement, style, quality, size) {
-  const textToRedo = btnElement.parentNode.childNodes[0].nodeValue.trim();
+  let parentElement = btnElement.parentElement.parentElement;
+  let textToRedo = parentElement.querySelector('.prompt').innerHTML;
+  textToRedo = removeSearchHitsMarkup(textToRedo);
+
   document.getElementById('prompt').value = textToRedo;
 
   const options = {'style': style, 'quality': quality, 'size': size};
@@ -234,7 +275,6 @@ function togglePromptInspirer(event) {
   }
 }
 
-
 function setInspirerDisplay(styleValue) {
   [inspirerId, 'backdrop'].forEach(function(id) {
     let elm = document.getElementById(id);
@@ -242,6 +282,45 @@ function setInspirerDisplay(styleValue) {
       elm.style.display = styleValue;
     }
   });
+}
+
+function startSearch(event) {
+  let query = prompt('Search in prompts:', '');
+  if (!query) { return; }
+
+  const resultsNode = document.getElementById('images')
+  resultsNode.innerHTML = '';
+
+  fetch('/search', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ query })
+  })
+  .then(response => response.json())
+  .then(dataAll => {
+    let results = dataAll.results;
+    if (results.length === 0) {
+      resultsNode.innerHTML = `<p class="error-wrapper">No results found for "${escapeHTML(query)}".</p>`;
+    }
+    else {
+      results.forEach(function(data) {
+        var imageWrapper = document.createElement('div');
+        imageWrapper.classList.add('image-wrapper');
+        imageWrapper.setAttribute('data-id', data.id); 
+        resultsNode.prepend(imageWrapper);
+
+        const doLazyLoad = false;
+        imageWrapper.innerHTML = getImageWrapperHTML(data.imageUrl, data.prompt, data.revisedPrompt, data.style, data.quality, data.size, data.id, data.model, doLazyLoad, query);
+      });
+
+    }
+  })
+  .catch(error => {
+    console.error('Search error:', error);
+  });
+
 }
 
 window.addEventListener('message', function(e) {
@@ -264,3 +343,15 @@ window.addEventListener('message', function(e) {
     }
   }
 });
+
+function escapeHTML(text) {
+  var map = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#039;'
+  };
+
+  return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
