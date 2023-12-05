@@ -194,6 +194,7 @@ function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, si
         <p>
           <span class="creationSettings">${settingsInfo}</span>
           <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
+          <button onclick="flipImage('image-${id}')" class="flipButton imageButton" title="Flips the view without changing the original">↔️ Flip</button>
           <a href="#" class="additionalButtonsLink" onclick="showMoreOptions(event, '${id}')">More...</a>
           <span id="additionalButtons-${id}" class="additionalButtons">
             <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
@@ -214,6 +215,20 @@ function rotateImage(id) {
   const newAngle = (parseInt(currentAngle) + 90) % 360;
   image.style.transform = `rotate(${newAngle}deg)`;
   image.setAttribute('data-angle', newAngle.toString());
+}
+
+function flipImage(id) {
+  const image = document.getElementById(id);
+
+  const currentAngle = image.getAttribute('data-angle') || '0';
+
+  const isFlipped = image.getAttribute('data-flipped') === 'true';
+  const newFlipState = !isFlipped;
+
+  const flipTransform = newFlipState ? 'scaleX(-1)' : 'scaleX(1)';
+  image.style.transform = `${flipTransform} rotate(${currentAngle}deg)`;
+  
+  image.setAttribute('data-flipped', newFlipState.toString());
 }
 
 function capitalize(str) {
