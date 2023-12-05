@@ -1,4 +1,5 @@
 const inspirerId = 'inspirer';
+let previousSearch = '';
 
 document.addEventListener('DOMContentLoaded', (event) => {
   fetch('/images-data')
@@ -294,7 +295,11 @@ function setInspirerDisplay(styleValue) {
 }
 
 function startSearch(event) {
-  let query = prompt('Search in prompts:', '');
+  let query = prompt('Search in prompts:', previousSearch);
+
+  if (query === null) { return; }
+  previousSearch = query;
+  
   if (!query) { return; }
 
   const resultsNode = document.getElementById('images')
