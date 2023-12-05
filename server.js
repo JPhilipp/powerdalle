@@ -245,18 +245,9 @@ app.delete('/delete-image/:id', (req, res) => {
 app.post('/search', async (req, res) => {
   const { query } = req.body;
   const queryWithWildcards = `%${query}%`;
+  const maxImagesToReturn = 100;
 
-  const maxImageToReturn = 100;
-
-  const searchQuery = `
-    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model
-    FROM images
-    WHERE prompt LIKE ? OR revisedPrompt LIKE ?
-    ORDER BY createdAt DESC
-    LIMIT ${maxImageToReturn}
-  `;
-
-  db.all(searchQuery, [queryWithWildcards], (err, rows) => {
+  const processAndSendResult = (err, rows) => {
     if (err) {
       console.error(err.message);
       res.status(500).json({ message: 'Error querying the database' });
@@ -274,9 +265,35 @@ app.post('/search', async (req, res) => {
         }))
       });
     }
-  });
+  };
 
+  const phraseSearchQuery = `
+    SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model
+    FROM images
+    WHERE prompt LIKE ? OR revisedPrompt LIKE ?
+    ORDER BY createdAt DESC
+    LIMIT ${maxImagesToReturn}
+  `;
+
+  db.all(phraseSearchQuery, [queryWithWildcards, queryWithWildcards], (err, rows) => {
+    if (rows && rows.length > 0) {
+      processAndSendResult(err, rows);
+    } else {
+      const words = query.split(/\s+/);
+      const wordSearchQueries = words.map(word => `(prompt LIKE '%${word}%' OR revisedPrompt LIKE '%${word}%')`).join(' AND ');
+      const wordSearchQuery = `
+        SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model
+        FROM images
+        WHERE ${wordSearchQueries}
+        ORDER BY createdAt DESC
+        LIMIT ${maxImagesToReturn}
+      `;
+
+      db.all(wordSearchQuery, [], processAndSendResult);
+    }
+  });
 });
+
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 

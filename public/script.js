@@ -133,8 +133,17 @@ function addSearchHitsMarkup(text, searchQuery) {
 
   const escapedSearchQuery = escapeRegExp(searchQuery);
   const regex = new RegExp(escapedSearchQuery, 'gi');
-  
-  const newText = text.replace(regex, function(match) { return `<span class="searchHit">${match}</span>`; });
+
+  let newText = text.replace(regex, function(match) { return `<span class="searchHit">${match}</span>`; });
+
+  if (!newText.includes('searchHit')) {
+    const words = searchQuery.split(/\s+/);
+    words.forEach(word => {
+      const wordRegex = new RegExp(escapeRegExp(word), 'gi');
+      newText = newText.replace(wordRegex, function(match) { return `<span class="searchHit">${match}</span>`; });
+    });
+  }
+
   return newText;
 }
 
