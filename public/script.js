@@ -115,10 +115,13 @@ document.addEventListener('click', function(event) {
   }
 });
 
-
 document.getElementById('images').addEventListener('click', function(event) {
   if (event.target.classList.contains('generatedImage')) {
-    event.target.classList.toggle('fullSizeImage');
+    if (event.ctrlKey) {
+      rotateImage(event.target.id);
+    } else {
+      event.target.classList.toggle('fullSizeImage');
+    }
   }
 });
 
@@ -178,6 +181,14 @@ function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, si
   const loadingAttribute = doLazyLoad ? 'loading="lazy"' : '';
   return `
         <img src="${imageUrl}" alt="" ${loadingAttribute} id="image-${id}" class="generatedImage" data-angle="0">
+        <div class="creationTools">
+          <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates (alternative: Ctrl+Click)">↻</button>
+          <button onclick="flipImage('image-${id}')" class="flipButton imageButton" title="Flips">↔️</button>
+          <a href="#" class="additionalButtonsLink" onclick="showMoreOptions(event, '${id}')">...</a>
+          <span id="additionalButtons-${id}" class="additionalButtons">
+            <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
+          </span>
+        </div>
         <div class="promptWrapper">
           <div class="prompt">${prompt}</div>
           <div class="promptButtons">
@@ -191,15 +202,9 @@ function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, si
             <button onclick="copyToClipboard(this)" class="copyToClipboard">📋 <span>copy revised prompt</span></button>
           </div>
         </div>
-        <p>
-          <span class="creationSettings">${settingsInfo}</span>
-          <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates the view without changing the original">↻ Rotate</button>
-          <button onclick="flipImage('image-${id}')" class="flipButton imageButton" title="Flips the view without changing the original">↔️ Flip</button>
-          <a href="#" class="additionalButtonsLink" onclick="showMoreOptions(event, '${id}')">More...</a>
-          <span id="additionalButtons-${id}" class="additionalButtons">
-            <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>
-          </span>
-        </p>
+        <div class="creationSettings">
+          ${settingsInfo}
+        </div>
   `;
 }
 

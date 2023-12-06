@@ -90,13 +90,6 @@ h1 {
   background-color: #fff;
 }
 
-.imageButton {
-  margin-left: 10px;
-  border: 1px solid #aaa;
-  border-bottom: 1px solid #000;
-  border-radius: 3px;
-}
-
 #useExactPrompt {
   display: inline-block;
   margin-right: 5px;
@@ -152,11 +145,6 @@ label[for="useExactPrompt"] {
   font-weight: bold;
 }
 
-.creationSettings {
-  color: #555;
-  font-style: italic;
-}
-
 .error-wrapper {
   color: red;
   font-weight: bold;
@@ -197,13 +185,32 @@ label[for="useExactPrompt"] {
 
 a.additionalButtonsLink {
   display: inline-block;
-  margin-left: 30px;
+  margin-left: 10px;
   color: #888;
 }
 
 .promptWrapper {
   padding-top: 16px;
   padding-bottom: 16px;
+}
+
+.creationTools {
+  margin-top: 16px;
+  margin-bottom: 16px;
+}
+
+.imageButton {
+  margin-left: 10px;
+  border: 1px solid #aaa;
+  border-bottom: 1px solid #000;
+  border-radius: 3px;
+  min-width: 50px;
+}
+
+.creationSettings {
+  margin-top: 16px;
+  color: #555;
+  font-style: italic;
 }
 
 .prompt {
