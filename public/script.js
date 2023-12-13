@@ -182,8 +182,8 @@ function getImageWrapperHTML(imageUrl, prompt, revisedPrompt, style, quality, si
   return `
         <img src="${imageUrl}" alt="" ${loadingAttribute} id="image-${id}" class="generatedImage" data-angle="0">
         <div class="creationTools">
-          <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotates (alternative: Ctrl+Click)">↻</button>
-          <button onclick="flipImage('image-${id}')" class="flipButton imageButton" title="Flips">↔️</button>
+          <button onclick="rotateImage('image-${id}')" class="rotateButton imageButton" title="Rotate (alternative: Ctrl+Click)">↷</button>
+          <button onclick="flipImage('image-${id}')" class="flipButton imageButton" title="Flip">↔️</button>
           <a href="#" class="additionalButtonsLink" onclick="showMoreOptions(event, '${id}')">...</a>
           <span id="additionalButtons-${id}" class="additionalButtons">
             <button class="deleteButton imageButton" data-id="${id}" title="Permanently deletes image from disk and database">🗑 Delete</button>

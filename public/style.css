@@ -90,6 +90,11 @@ h1 {
   background-color: #fff;
 }
 
+#generate:active {
+  color: #999;
+  border-bottom: 1px solid #aaa;
+}
+
 #useExactPrompt {
   display: inline-block;
   margin-right: 5px;
@@ -201,10 +206,29 @@ a.additionalButtonsLink {
 
 .imageButton {
   margin-left: 10px;
+}
+
+.redoPrompt {
+  margin-left: 20px;
+}
+
+.imageButton,
+.redoPrompt {
   border: 1px solid #aaa;
   border-bottom: 1px solid #000;
   border-radius: 3px;
-  min-width: 50px;
+  min-width: 70px;
+  min-height: 25px;
+}
+
+.imageButton:hover,
+.redoPrompt:hover {
+  background-color: #fff;
+}
+
+.imageButton:active,
+.redoPrompt:active {
+  color: #999;
 }
 
 .creationSettings {
@@ -215,10 +239,6 @@ a.additionalButtonsLink {
 
 .prompt {
   padding-bottom: 10px;
-}
-
-.redoPrompt {
-  margin-left: 20px;
 }
 
 #inspirer {
