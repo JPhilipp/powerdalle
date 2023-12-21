@@ -281,7 +281,7 @@ app.post('/search', async (req, res) => {
       processAndSendResult(err, rows);
     } else {
       const words = query.split(/\s+/);
-      const wordSearchQueries = words.map(word => `(prompt LIKE '%${word}%' OR revisedPrompt LIKE '%${word}%')`).join(' AND ');
+      const wordSearchQueries = words.map(word => `(prompt LIKE '%${word}%' OR revisedPrompt LIKE '%${word}%' OR imageUrl LIKE '%${word}%')`).join(' AND ');
       const wordSearchQuery = `
         SELECT id, imageUrl, prompt, revisedPrompt, style, size, quality, model
         FROM images
