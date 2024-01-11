@@ -246,13 +246,14 @@ app.delete('/delete-image/:id', (req, res) => {
 app.post('/search', async (req, res) => {
   const { query } = req.body;
   const queryWithWildcards = `%${query}%`;
-  const maxImagesToReturn = 100;
+  const maxImagesToReturn = 500;
 
   const processAndSendResult = (err, rows) => {
     if (err) {
       console.error(err.message);
       res.status(500).json({ message: 'Error querying the database' });
     } else {
+      console.error("Search result count: " + rows.length);
       res.json({
         results: rows.map(row => ({
           id: row.id,
