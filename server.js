@@ -246,7 +246,7 @@ app.delete('/delete-image/:id', (req, res) => {
 app.post('/search', async (req, res) => {
   const { query } = req.body;
   const queryWithWildcards = `%${query}%`;
-  const maxImagesToReturn = 500;
+  const maxImagesToReturn = 1000;
 
   const processAndSendResult = (err, rows) => {
     if (err) {
