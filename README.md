@@ -39,3 +39,10 @@ MODEL=dall-e-2
 
 To change the maximum number of images served at the start (the default is 1000), use e.g.:  
 MAX_IMAGES_TO_SERVE_AT_START=2000
+
+# Docker
+
+- Rename `.env_template` to `.env` and set your OpenAI API Key
+- Build the image with `docker compose build`
+- Run with `docker compose up -d`
+- Then browse http://localhost:3000
