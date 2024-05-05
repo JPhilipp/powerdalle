@@ -39,3 +39,7 @@ MODEL=dall-e-2
 
 To change the maximum number of images served at the start (the default is 1000), use e.g.:  
 MAX_IMAGES_TO_SERVE_AT_START=2000
+
+# Also see
+
+I made a new (Electron-based) app called [QuickImage](https://github.com/JPhilipp/quickimage) with support for Stable Diffusion 3 and Dall-E 3. It also comes with a Windows exe.
