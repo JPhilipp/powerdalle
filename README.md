@@ -40,6 +40,9 @@ MODEL=dall-e-2
 To change the maximum number of images served at the start (the default is 1000), use e.g.:  
 MAX_IMAGES_TO_SERVE_AT_START=2000
 
+To change the port Power Dall-E runs on (the default is 3000), use e.g. the following and also adjust the start.bat:
+PORT=3030
+
 # Also see
 
 I made a new (Electron-based) app called [QuickImage](https://github.com/JPhilipp/quickimage) with support for Stable Diffusion 3 and Dall-E 3. It also comes with a Windows exe.

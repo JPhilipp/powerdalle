@@ -3,7 +3,6 @@ const fetch = require('node-fetch');
 const fs = require('fs');
 const path = require('path');
 const app = express();
-const PORT = 3030;
 const axios = require('axios');
 const crypto = require('crypto');
 require('dotenv').config();
@@ -18,6 +17,7 @@ const allowedStyles = ['vivid', 'natural'];
 const defaultModel = "dall-e-3";
 const model = process.env.MODEL ? process.env.MODEL : defaultModel;
 const saveJsonWithImages = process.env.SAVE_JSON_WITH_IMAGES === 'true';
+const port = process.env.PORT ? process.env.PORT : 3000;
 
 const parsedMaxImagesValue = parseInt(process.env.MAX_IMAGES_TO_SERVE_AT_START, 10);
 const maxImagesToServeAtStart = parsedMaxImagesValue > 0 ? parsedMaxImagesValue : 1000;
@@ -299,8 +299,8 @@ app.post('/search', async (req, res) => {
 
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
   const imagesDir = path.join(__dirname, 'images');
   if (!fs.existsSync(imagesDir)){
     fs.mkdirSync(imagesDir);
