@@ -14,11 +14,11 @@ _Overview video_
 # Installation
 
 1. Ensure you have [Node.js](https://nodejs.org) installed.
-2. Load this git project onto your local drive.
-3. Create a name-less file ".env" in the project root and put into it [your OpenAI API](https://platform.openai.com/api-keys) key by writing: _OPENAI_API_KEY=yourapikey_
-4. Navigate to the project via the command line, and type *npm install*
-5. Then in the same command line, type *npm start*
-6. Open http://localhost:3000 in your browser. Have fun!
+3. Load this git project onto your local drive. (e.g., `git clone https://github.com/JPhilipp/powerdalle.git`)
+5. Create a name-less file `.env` in the project root and put into it [your OpenAI API](https://platform.openai.com/api-keys) key by writing: `OPENAI_API_KEY=yourapikey`
+6. Navigate to the project via the command line, and type `npm install`
+7. Then in the same command line, type `npm start`
+8. Open [http://localhost:3030](http://localhost:3030) in your browser. Have fun!
 
 _This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI costs dashboard](https://platform.openai.com/usage) and the [pricing table](https://openai.com/pricing))._
 
