@@ -4,6 +4,7 @@ The Power Dall-E local web UI is a simple way to use Dall-E 3 with its advanced 
 With Power Dall-E, you can launch multiple generations at once in any number, which makes it faster than ChatGPT and better to A/B test prompts, if you are willing to carry the extra API cost. One other difference to ChatGPT is that Power Dall-E doesn't remember any conversation session, something which can lead ChatGPT (sometimes for better, sometimes for worse) to bias successive prompt rewrites to the ongoing conversation.
 
 _➤ For something even easier to install, check out [QuickImage](https://github.com/JPhilipp/quickimage)._
+
 _➤ For something supporting ChatGPT's GPT-Image-1, check out [LeanGen](https://github.com/JPhilipp/LeanGen)._
 
 This app does not connect to any server outside of your local one and OpenAI. Be aware of the costs though, as every API call is paid to OpenAI as per their usual pricing (note I'm not part of that transaction nor do I make money from it, it's just a local way for you to connect via your OpenAI API key).
