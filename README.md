@@ -19,10 +19,11 @@ _Overview video_
 
 1. Ensure you have [Node.js](https://nodejs.org) installed.
 2. Load this git project onto your local drive.
-3. Create a name-less file ".env" in the project root and put into it [your OpenAI API](https://platform.openai.com/api-keys) key by writing: _OPENAI_API_KEY=yourapikey_
-4. Navigate to the project via the command line, and type *npm install*
-5. Then in the same command line, type *npm start*
-6. Open http://localhost:3000 in your browser. Have fun!
+3. Create a name-less file ".env" in the project root and put into it [your OpenAI API](https://platform.openai.com/api-keys) key by writing: OPENAI_API_KEY=yourapikey
+4. If your API key is scoped to a specific project, then also add OPENAI_ORGANIZATION=org-... and OPENAI_PROJECT=proj_... values to the .env file
+5. Navigate to the project via the command line, and type *npm install*
+6. Then in the same command line, type *npm start*
+7. Open http://localhost:3000 in your browser. Have fun!
 
 _This project makes no guarantees for being bug-free, use at your own risk, and keep in mind that API calls cost money (see the [OpenAI costs dashboard](https://platform.openai.com/usage) and the [pricing table](https://openai.com/pricing))._
 
