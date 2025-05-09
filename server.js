@@ -18,6 +18,8 @@ const defaultModel = "dall-e-3";
 const model = process.env.MODEL ? process.env.MODEL : defaultModel;
 const saveJsonWithImages = process.env.SAVE_JSON_WITH_IMAGES === 'true';
 const port = process.env.PORT ? process.env.PORT : 3000;
+const openAiOrganization = process.env.OPENAI_ORGANIZATION ? process.env.OPENAI_ORGANIZATION : undefined;
+const openAiProject = process.env.OPENAI_PROJECT ? process.env.OPENAI_PROJECT : undefined;
 
 const parsedMaxImagesValue = parseInt(process.env.MAX_IMAGES_TO_SERVE_AT_START, 10);
 const maxImagesToServeAtStart = parsedMaxImagesValue > 0 ? parsedMaxImagesValue : 1000;
@@ -67,6 +69,8 @@ app.post('/generate-image', async (req, res) => {
       headers: {
         'Authorization': `Bearer ${process.env.OPENAI_API_KEY}`,
         'Content-Type': 'application/json',
+        ...(openAiOrganization && {'OpenAI-Organization': openAiOrganization}),
+        ...(openAiProject && {'OpenAI-Project': openAiProject}),
       },
       body: JSON.stringify({
         prompt: prompt,
