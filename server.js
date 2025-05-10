@@ -73,12 +73,12 @@ app.post('/generate-image', async (req, res) => {
         ...(openAiProject && {'OpenAI-Project': openAiProject}),
       },
       body: JSON.stringify({
-        prompt: prompt,
         n: 1,
-        size: size,
-        style: style,
-        quality: quality,
-        model: model
+        prompt,
+        size,
+        model,
+        ...(model !== "dall-e-2" && {style}),
+        ...(model !== "dall-e-2" && {quality}),
       }),
     });
 
